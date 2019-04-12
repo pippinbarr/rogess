@@ -1,0 +1,7 @@
+- ~~Make the board work~~
+- ~~Make the AI work~~
+- Add HP to pieces
+- Make attacking remove random health
+- Add PGN/Rogue message
+- Add status bar
+- Style it
