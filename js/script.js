@@ -14,6 +14,10 @@ const placeSFX = new Howl({
 const captureSFX = new Howl({
   src: ['assets/sounds/capture.wav']
 });
+const attackSFX = new Howl({
+  src: ['assets/sounds/attack.wav']
+});
+
 
 let depth = 2;
 let board;
@@ -22,23 +26,39 @@ let from;
 let moves = 0;
 let lastMove = '';
 let positionsExamined = 0;
+let hpTable = {
+  k: 11,
+  q: 10,
+  r: 5,
+  b: 3,
+  n: 3,
+  p: 1
+};
+
+let hpBoard = {
+  a: [],
+  b: [],
+  c: [],
+  d: [],
+  e: [],
+  f: [],
+  g: [],
+  h: []
+};
+
+let config = {
+  moveSpeed: 200,
+  draggable: false,
+  position: 'start',
+  onMoveEnd: () => {
+    // if (lastMove === null) return;
+
+  }
+};
 
 $(document).ready(setup);
 
 function setup() {
-  let config = {
-    draggable: false,
-    position: 'start',
-    onMoveEnd: () => {
-      if (lastMove === null) return;
-      if (lastMove.captured !== undefined) {
-        captureSFX.play();
-      }
-      else {
-        placeSFX.play();
-      }
-    }
-  };
   board = ChessBoard('board', config);
   game = new Chess();
   from = null;
@@ -46,7 +66,30 @@ function setup() {
   positionsExamined = 0;
   lastMove = null
 
+  // Set up our own representation of the board for HP business.
+  // How depressing that this seems necessary.
+  $('.square-55d63').each(function () {
+    let file = $(this).attr('data-square')[0];
+    let rank = $(this).attr('data-square')[1];
+    let $piece = $(this).find('img');
+    if ($piece.length !== 0) {
+      let color = $piece.attr('data-piece')[0];
+      let type = $piece.attr('data-piece')[1].toLowerCase();
+      hpBoard[file][rank] = { type: type, color: color, hp: hpTable[type] };
+    }
+    else {
+      hpBoard[file][rank] = undefined;
+    }
+  });
+
   $('.square-55d63').on('click', squareClicked);
+}
+
+function dealgebriac(square) {
+  let file = "abcdefgh".indexOf(square[0]);
+  let rank = parseInt(square[1]);
+  let dealgebrised = ((8 - rank) * 8) + file;
+  return (8 - rank) * 2 * 8 + file;
 }
 
 function squareClicked (event) {
@@ -64,7 +107,7 @@ function squareClicked (event) {
   }
 }
 
-function  highlightMoves (square) {
+function highlightMoves (square) {
   clearHighlights();
 
   from = square;
@@ -97,20 +140,61 @@ function moveWhite(from,to) {
     to: to,
     promotion: 'q' // NOTE: always promote to a queen for example simplicity
   };
+
   lastMove = game.move(move);
+
 
   // Clear all highlights from the board (a new turn is about to begin)
   clearHighlights();
 
+
   // Update the board based on the new position
   board.position(game.fen(),true);
 
+  setTimeout(() => {
+    handleLastMove();
+  },config.moveSpeed * 1.1);
+}
+
+
+
+function handleLastMove() {
+  let to = lastMove.to;
+  let from = lastMove.from;
+  if (lastMove.captured) {
+    hpBoard[to[0]][to[1]].hp--;
+    if (hpBoard[to[0]][to[1]].hp !== 0) {
+      attackSFX.play();
+      game.undo();
+      board.position(game.fen(),true);
+      setTimeout(() => {
+        placeSFX.play();
+      },config.moveSpeed);
+      // Change to opposite turn
+      let fen = game.fen();
+      let fenArray = fen.split(' ');
+      fenArray[1] = game.turn() === 'w' ? 'b' : 'w';
+      fenArray[3] = '-'; // Really don't get how this goes wonky and needs this 'fix'
+      fen = fenArray.join(' ');
+      game.load(fen);
+    }
+    else {
+      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      captureSFX.play();
+    }
+  }
+  else {
+    hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+    placeSFX.play();
+  }
   // Reset the move tracking
   from = null;
 
-  setTimeout(() => {
-    moveBlack();
-  },500);
+  if (game.turn() === 'b') {
+    setTimeout(() => {
+      moveBlack();
+    },config.moveSpeed * 1.1);
+  }
 }
 
 function moveBlack() {
@@ -118,12 +202,16 @@ function moveBlack() {
   let move = getBlackMove();
   lastMove = game.move(move);
   board.position(game.fen(),true);
+
+  setTimeout(() => {
+    handleLastMove();
+  },config.moveSpeed * 1.1);
 }
 
 function getBlackMove() {
   positionsExamined = 0;
   let move = minimaxRoot(depth,game,true)
-  console.log(`Examined ${positionsExamined} positions.`);
+  // console.log(`Examined ${positionsExamined} positions.`);
   return move;
 }
 

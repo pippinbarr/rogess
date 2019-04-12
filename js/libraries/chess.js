@@ -1285,6 +1285,10 @@ var Chess = function(fen) {
       return load(fen);
     },
 
+    getBoard: function () {
+      return board;
+    },
+
     reset: function() {
       return reset();
     },
