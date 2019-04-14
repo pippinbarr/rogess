@@ -1,11 +1,11 @@
 - ~~Make the board work~~
 - ~~Make the AI work~~
 - ~~Add HP to pieces~~
+- ~~Account for castling and en passant~~
+- ~~Think about promotion and HP~~
+- ~~Make attacking remove random health~~
 
-- Account for castling and en passant
-- Think about promotion and HP
 - Think about the AI's lack of awareness of HP in its tactics
-- Make attacking remove random health
 - Add PGN/Rogue message
 - Add status bar
 - Style it
