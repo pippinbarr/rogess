@@ -47,12 +47,11 @@ let hpBoard = {
 };
 
 let config = {
+  showNotation: false,
   moveSpeed: 200,
   draggable: false,
   position: 'start',
   onMoveEnd: () => {
-    // if (lastMove === null) return;
-
   }
 };
 
@@ -143,10 +142,8 @@ function moveWhite(from,to) {
 
   lastMove = game.move(move);
 
-
   // Clear all highlights from the board (a new turn is about to begin)
   clearHighlights();
-
 
   // Update the board based on the new position
   board.position(game.fen(),true);
@@ -156,17 +153,24 @@ function moveWhite(from,to) {
   },config.moveSpeed * 1.1);
 }
 
-
-
 function handleLastMove() {
+  // This failed on checkmate?
   let to = lastMove.to;
   let from = lastMove.from;
+  // Check for a capture
   if (lastMove.captured) {
-    hpBoard[to[0]][to[1]].hp--;
-    if (hpBoard[to[0]][to[1]].hp !== 0) {
+    // If it's a capture (an attack in this game), reduce HP based on attacker's current HP
+    let damage = Math.floor(Math.random() * (hpBoard[from[0]][from[1]].hp + 1));
+    hpBoard[to[0]][to[1]].hp -= damage;
+    // Check for death
+    if (hpBoard[to[0]][to[1]].hp > 0) {
+      // If they didn't die then we need to display attacking
       attackSFX.play();
+      // Then undo the capture (since it didn't "take")
       game.undo();
+      // Reset the board, animating it back to the previous position
       board.position(game.fen(),true);
+      // Play the placement sound once the piece has animated back
       setTimeout(() => {
         placeSFX.play();
       },config.moveSpeed);
@@ -179,12 +183,60 @@ function handleLastMove() {
       game.load(fen);
     }
     else {
+      // Otherwise, they died, so we need to update the HP states
+      // Move the capturing piece's HP with it to the captured square
       hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      // Remove the HP information at its previous location (there's nothing there now)
+      hpBoard[from[0]][from[1]] = undefined;
+      // Play the capture sound
       captureSFX.play();
     }
   }
   else {
-    hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+    // If we're here then the piece just moved
+    // We need to think about castling
+    if (lastMove.flags.indexOf('k') !== -1) {
+      // Kingside
+      // Move the king's HP from the king's square, which is just the movement indicated
+      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      // Remove the king's HP from the king's square
+      hpBoard[from[0]][from[1]] = undefined;
+      // Think  about the rook. We can rely on the rank to control for color
+      // Move the rook's HP
+      hpBoard['f'][to[1]] = hpBoard['h'][to[1]];
+      // Remove the rook's HP
+      hpBoard['h'][to[1]] = undefined;
+    }
+    else if (lastMove.flags.indexOf('q') !== -1) {
+      // Queenside
+      // Move the king's HP from the king's square, which is just the movement indicated
+      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      // Remove the king's HP from the king's square
+      hpBoard[from[0]][from[1]] = undefined;
+      // Think about the rook. We can rely on the rank to control for color
+      // Move the rook's HP
+      hpBoard['d'][to[1]] = hpBoard['a'][to[1]];
+      // Remove the rook's HP
+      hpBoard['a'][to[1]] = undefined;
+    }
+    else if (lastMove.flags.indexOf('p') !== -1) {
+      // Promotion (which is always to queen for simplicity here)
+      // Move the HP object to the new (promotion) square
+      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      // Remove the old position
+      hpBoard[from[0]][from[1]] = undefined;
+      // Set up the to reflect a queen
+      hpBoard[to[0]][to[1]].type = 'q';
+      hpBoard[to[0]][to[1]].color = lastMove.color;
+      hpBoard[to[0]][to[1]].hp = hpTable['q'];
+    }
+    else {
+      // A regular move
+      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      // Remove the previous
+      hpBoard[from[0]][from[1]] = undefined;
+    }
+    // Placement sound
     placeSFX.play();
   }
   // Reset the move tracking
