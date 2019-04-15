@@ -4,9 +4,57 @@ This is the style file for this project.
 
 **********************************************/
 
+@font-face {
+  font-family: 'Pixeled';
+  src: url('../assets/fonts/Pixeled.ttf') format('truetype')
+}
+
+@font-face {
+  font-family: 'CGA';
+  src: url('../assets/fonts/Px437_IBM_CGA-2y.ttf') format('truetype')
+}
+
+body {
+  background-color: black;
+}
+
+#wrapper {
+  width: 50vw;
+  margin: 0 auto;
+}
+
+#pgn {
+  margin-bottom: 10px;
+  font-family: CGA;
+  font-size: 1em;
+  color: grey;
+  text-align: left;
+  margin-top: 10px;
+}
+
+#title {
+  font-family: CGA;
+  font-size: 5em;
+  color: yellow;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#author {
+  font-family: CGA;
+  font-size: 1em;
+  color: grey;
+  text-align: center;
+  margin-top: 10px;
+}
 
 #board {
+  margin: 0 auto;
   width: 400px;
+}
+
+.board-b72b1 {
+  border: none;
 }
 
 .white-1e1d7 {

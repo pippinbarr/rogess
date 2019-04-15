@@ -23,7 +23,7 @@ let depth = 2;
 let board;
 let game;
 let from;
-let moves = 0;
+let moveCount = 0;
 let lastMove = '';
 let positionsExamined = 0;
 let hpTable = {
@@ -64,11 +64,11 @@ function setup() {
 
   // En passant test position
   // game.load('k7/2R1p3/8/8/3P4/8/8/1R2K3 w - - 0 1');
-  
+
   board.position(game.fen(),false);
 
   from = null;
-  moves = 0;
+  moveCount = 0;
   positionsExamined = 0;
   lastMove = null
 
@@ -161,6 +161,12 @@ function moveWhite(from,to) {
 }
 
 function handleLastMove() {
+  if (lastMove.color === 'w') {
+    $('#pgn').text(`${moveCount + 1}. ${lastMove.san}`);
+  }
+  else {
+    $('#pgn').text(`${$('#pgn').text()} ${lastMove.san}`);
+  }
   // This failed on checkmate?
   let to = lastMove.to;
   let target = lastMove.to;
@@ -272,7 +278,7 @@ function handleLastMove() {
 }
 
 function moveBlack() {
-  moves++;
+  moveCount++;
   let move = getBlackMove();
   lastMove = game.move(move);
   board.position(game.fen(),true);
