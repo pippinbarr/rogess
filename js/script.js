@@ -59,7 +59,14 @@ $(document).ready(setup);
 
 function setup() {
   board = ChessBoard('board', config);
+  // game = new Chess();
   game = new Chess();
+
+  // En passant test position
+  // game.load('k7/2R1p3/8/8/3P4/8/8/1R2K3 w - - 0 1');
+  
+  board.position(game.fen(),false);
+
   from = null;
   moves = 0;
   positionsExamined = 0;
@@ -156,14 +163,27 @@ function moveWhite(from,to) {
 function handleLastMove() {
   // This failed on checkmate?
   let to = lastMove.to;
+  let target = lastMove.to;
+  if (lastMove.flags.indexOf('e') !== -1) {
+    let file = lastMove.to[0];
+    let rank;
+    if (lastMove.color === 'w') {
+      rank = parseInt(lastMove.to[1]) - 1;
+    }
+    else {
+      rank = parseInt(lastMove.to[1]) + 1;
+    }
+    target = file + rank;
+  }
   let from = lastMove.from;
   // Check for a capture
   if (lastMove.captured) {
     // If it's a capture (an attack in this game), reduce HP based on attacker's current HP
     let damage = Math.floor(Math.random() * (hpBoard[from[0]][from[1]].hp + 1));
-    hpBoard[to[0]][to[1]].hp -= damage;
+    let targetHP;
+    hpBoard[target[0]][target[1]].hp -= damage;
     // Check for death
-    if (hpBoard[to[0]][to[1]].hp > 0) {
+    if (hpBoard[target[0]][target[1]].hp > 0) {
       // If they didn't die then we need to display attacking
       attackSFX.play();
       // Then undo the capture (since it didn't "take")
@@ -184,9 +204,11 @@ function handleLastMove() {
     }
     else {
       // Otherwise, they died, so we need to update the HP states
+      // Remove the target of the capture (this will be the same as 'to' if a standard capture)
+      hpBoard[target[0]][target[1]] = undefined;
       // Move the capturing piece's HP with it to the captured square
       hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
-      // Remove the HP information at its previous location (there's nothing there now)
+      // Remove the HP information at capturing piece's previous location (there's nothing there now)
       hpBoard[from[0]][from[1]] = undefined;
       // Play the capture sound
       captureSFX.play();

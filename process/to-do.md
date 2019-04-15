@@ -4,6 +4,7 @@
 - ~~Account for castling and en passant~~
 - ~~Think about promotion and HP~~
 - ~~Make attacking remove random health~~
+- ~~Handle en passant properly~~
 
 - Think about the AI's lack of awareness of HP in its tactics
 - Add PGN/Rogue message
