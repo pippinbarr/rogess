@@ -55,6 +55,14 @@ let hpBoard = {
   h: []
 };
 
+let missVerbs = [
+  "misses", "swings and misses", "barely misses", "doesn't hit"
+];
+
+let hitVerbs = [
+  "hits", "swings and hits", "has injured", "scored an excellent hit on"
+];
+
 let config = {
   showNotation: false,
   moveSpeed: 200,
@@ -197,6 +205,7 @@ function handleLastMove() {
     // If it's a capture (an attack in this game), reduce HP based on attacker's current HP
     let damage = Math.floor(Math.random() * (hpBoard[from[0]][from[1]].hp + 1));
     let targetHP;
+    lastMove.damage = damage;
     hpBoard[target[0]][target[1]].hp -= damage;
     // Check for death
     if (hpBoard[target[0]][target[1]].hp > 0) {
@@ -308,13 +317,25 @@ function updatePGN () {
 
   let note = '';
 
+  let active = (lastMove.color === 'w') ? 'Your' : 'The black';
+  let passive = (lastMove.color === 'w') ? 'The black' : 'Your';
+
   // Deal with capture messages
   if (san.indexOf('x') !== -1) {
-    note = ` (${pieceNames[lastMove.piece]} captured ${pieceNames[lastMove.captured]})`;
+    note = ` (${active} ${pieceNames[lastMove.piece]} defeated ${passive.toLowerCase()} ${pieceNames[lastMove.captured]})`;
   }
   // Deal with attack messages
   else if (san.indexOf('*') !== -1) {
-    note = ` (${pieceNames[lastMove.piece]} attacked ${pieceNames[lastMove.captured]})`;
+    san = san.replace('+','');
+    let verb = '';
+    if (lastMove.damage === 0) {
+      // If there's no damage, the san shouldn't display a check because the move didn't "complete"
+      verb = missVerbs[Math.floor(Math.random() * missVerbs.length)];
+    }
+    else {
+      verb = hitVerbs[Math.floor(Math.random() * hitVerbs.length)];
+    }
+    note = ` (${active} ${pieceNames[lastMove.piece]} ${verb} ${passive.toLowerCase()} ${pieceNames[lastMove.captured]})`;
   }
 
   if (lastMove.color === 'w') {
