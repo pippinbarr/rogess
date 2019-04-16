@@ -15,12 +15,47 @@ This is the style file for this project.
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background-color: black;
 }
 
-#wrapper {
-  width: 50vw;
-  margin: 0 auto;
+/* MOBILE? */
+@media only screen and (max-device-width: 768px) {
+  body {
+    font-size: 1.75em;
+  }
+
+  #wrapper {
+    width: 100vw;
+    margin: 0 auto;
+  }
+
+  #board {
+    margin: 0 auto;
+    width: 100vw;
+  }
+
+  .board-b72b1 {
+    width: 100vw;
+  }
+}
+
+/* DESKTOP and IPAD? */
+@media only screen and (min-device-width: 768px) {
+  #wrapper {
+    width: 50vw;
+    margin: 0 auto;
+  }
+
+  #board {
+    margin: 0 auto;
+    width: 400px;
+  }
+
+  .board-b72b1 {
+    width: 400px;
+  }
 }
 
 #pgn {
@@ -50,15 +85,12 @@ body {
 
 #status {
   margin-top: 20px;
+  margin-bottom: 20px;
   font-family: CGA;
   font-size: 1em;
   color: yellow;
   text-align: left;
-}
-
-#board {
-  margin: 0 auto;
-  width: 400px;
+  display: none;
 }
 
 .board-b72b1 {

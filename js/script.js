@@ -19,6 +19,7 @@ const attackSFX = new Howl({
 });
 
 
+let firstClick = true;
 let depth = 2;
 let board;
 let game;
@@ -105,6 +106,12 @@ function squareClicked (event) {
   let validPiece = (piece.length !== 0 && piece.attr('data-piece').indexOf(game.turn()) !== -1);
 
   if (validPiece) {
+    if (firstClick) {
+      $('#status').show();
+      $('#title').hide();
+      $('#author').hide();
+      firstClick = false;
+    }
     highlightMoves(square);
   }
   else if (from !== null && $(event.currentTarget).hasClass('highlight1-32417')) {
