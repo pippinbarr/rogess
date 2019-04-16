@@ -50,7 +50,7 @@ body {
 
   #board {
     margin: 0 auto;
-    width: 400px;
+    width: 50vw;
   }
 
   .board-b72b1 {
@@ -65,6 +65,7 @@ body {
   color: grey;
   text-align: left;
   margin-top: 10px;
+  height: 2em;
 }
 
 #title {
@@ -89,7 +90,7 @@ body {
   font-family: CGA;
   font-size: 1em;
   color: yellow;
-  text-align: left;
+  text-align: center;
   display: none;
 }
 

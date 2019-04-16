@@ -35,6 +35,14 @@ let hpTable = {
   n: 3,
   p: 1
 };
+let pieceNames = {
+  k: 'king',
+  q: 'queen',
+  r: 'rook',
+  b: 'bishop',
+  n: 'knight',
+  p: 'pawn'
+};
 
 let hpBoard = {
   a: [],
@@ -164,16 +172,11 @@ function moveWhite(from,to) {
 
   setTimeout(() => {
     handleLastMove();
+    updatePGN();
   },config.moveSpeed * 1.1);
 }
 
 function handleLastMove() {
-  if (lastMove.color === 'w') {
-    $('#pgn').text(`${moveCount + 1}. ${lastMove.san}`);
-  }
-  else {
-    $('#pgn').text(`${$('#pgn').text()} ${lastMove.san}`);
-  }
   // This failed on checkmate?
   let to = lastMove.to;
   let target = lastMove.to;
@@ -214,6 +217,10 @@ function handleLastMove() {
       fenArray[3] = '-'; // Really don't get how this goes wonky and needs this 'fix'
       fen = fenArray.join(' ');
       game.load(fen);
+      // Update san in last move to out notation
+      console.log(lastMove.san);
+      lastMove.san = lastMove.san.replace('x','*');
+      console.log(lastMove.san);
     }
     else {
       // Otherwise, they died, so we need to update the HP states
@@ -292,7 +299,30 @@ function moveBlack() {
 
   setTimeout(() => {
     handleLastMove();
+    updatePGN();
   },config.moveSpeed * 1.1);
+}
+
+function updatePGN () {
+  let san = lastMove.san;
+
+  let note = '';
+
+  // Deal with capture messages
+  if (san.indexOf('x') !== -1) {
+    note = ` (${pieceNames[lastMove.piece]} captured ${pieceNames[lastMove.captured]})`;
+  }
+  // Deal with attack messages
+  else if (san.indexOf('*') !== -1) {
+    note = ` (${pieceNames[lastMove.piece]} attacked ${pieceNames[lastMove.captured]})`;
+  }
+
+  if (lastMove.color === 'w') {
+    $('#pgn').text(`${moveCount + 1}. ${san}${(note != '') ? note : ''}`);
+  }
+  else {
+    $('#pgn').text(`${$('#pgn').text()} ${san}${(note != '') ? note : ''}`);
+  }
 }
 
 function getBlackMove() {
