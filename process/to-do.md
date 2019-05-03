@@ -7,7 +7,7 @@
 - ~~Handle en passant properly~~
 - ~~Add PGN/Rogue message~~
 - ~~Style it~~
+- ~~Add working status bar~~
+- ~~__NOT ANYMORE__ Add level-up when you capture a piece (you take its maximum HP? Its current HP?)~~
 
 - Think about the AI's lack of awareness of HP in its tactics
-- Add working status bar
-- Add level-up when you capture a piece (you take its maximum HP? Its current HP?)
