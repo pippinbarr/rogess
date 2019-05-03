@@ -377,7 +377,8 @@ function getBlackMove() {
 }
 
 function minimaxRoot (depth, game, isMaximisingPlayer) {
-  var newGameMoves = game.moves();
+  console.log("ROOT");
+  var newGameMoves = game.moves({verbose: true});
   var evaluations = [];
 
   var bestMove = -9999;
@@ -386,12 +387,14 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
   // console.log(`Starting depth is ${depth}`);
 
   for(var i = 0; i < newGameMoves.length; i++) {
-    var newGameMove = newGameMoves[i]
+    var newGameMove = newGameMoves[i];
     game.move(newGameMove);
     if (game.in_stalemate()) {
       game.undo();
       continue;
     }
+    // let newHPBoard = newHPBoardFromMove(game,newGameMove,hpBoard);
+    // var value = minimax(depth - 1, game, newHPBoard, -10000, 10000, !isMaximisingPlayer);
     var value = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
     if (game.in_check()) {
       value += 5;
@@ -406,14 +409,131 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
   return bestMoveFound;
 }
 
+function iterationCopy(src) {
+  let target = {};
+  for (let prop in src) {
+    if (src.hasOwnProperty(prop)) {
+      target[prop] = src[prop];
+      for (let prop2 in src[prop]) {
+        if (src[prop].hasOwnProperty(prop2)) {
+          target[prop][prop2] = src[prop][prop2];
+        }
+      }
+    }
+  }
+  return target;
+}
+
+function newHPBoardFromMove(game,move,fromHPBoard) {
+  let newHPBoard = iterationCopy(fromHPBoard);
+
+  let to = move.to;
+  let target = move.to;
+  if (move.flags.indexOf('e') !== -1) {
+    let file = move.to[0];
+    let rank;
+    if (move.color === 'w') {
+      rank = parseInt(move.to[1]) - 1;
+    }
+    else {
+      rank = parseInt(move.to[1]) + 1;
+    }
+    target = file + rank;
+  }
+  let from = move.from;
+
+  // Check for a capture
+  if (move.captured) {
+    // If it's a capture (an attack in this game), reduce HP based on attacker's current HP
+    let damage = Math.floor(Math.random() * (newHPBoard[from].hp + 1));
+    let targetHP;
+    move.damage = damage;
+    newHPBoard[target].hp -= damage;
+    // Check for death
+    if (newHPBoard[target].hp > 0) {
+      // Then undo the capture (since it didn't "take")
+      game.undo();
+      // Change to opposite turn
+      let fen = game.fen();
+      let fenArray = fen.split(' ');
+      fenArray[1] = game.turn() === 'w' ? 'b' : 'w';
+      fenArray[3] = '-'; // Really don't get how this goes wonky and needs this 'fix'
+      fen = fenArray.join(' ');
+      game.load(fen);
+    }
+    else {
+      // Otherwise, they died, so we need to update the HP states
+      // Remove the target of the capture (this will be the same as 'to' if a standard capture)
+      newHPBoard[target] = undefined;
+      // Update captures stat
+      newHPBoard[from].captures++;
+      // Update XP
+
+      // Move the capturing piece's HP with it to the captured square
+      newHPBoard[to] = newHPBoard[from];
+      // Remove the HP information at capturing piece's previous location (there's nothing there now)
+      newHPBoard[from] = undefined;
+    }
+  }
+  else {
+    // If we're here then the piece just moved
+    // We need to think about castling
+    if (move.flags.indexOf('k') !== -1) {
+      // Kingside
+      // Move the king's HP from the king's square, which is just the movement indicated
+      newHPBoard[to] = newHPBoard[from];
+      // Remove the king's HP from the king's square
+      newHPBoard[from] = undefined;
+      // Think  about the rook. We can rely on the rank to control for color
+      // Move the rook's HP
+      newHPBoard['f' + to[1]] = newHPBoard['h' + to[1]];
+      // Remove the rook's HP
+      newHPBoard['h' + to[1]] = undefined;
+    }
+    else if (move.flags.indexOf('q') !== -1) {
+      // Queenside
+      // Move the king's HP from the king's square, which is just the movement indicated
+      newHPBoard[to] = newHPBoard[from];
+      // Remove the king's HP from the king's square
+      newHPBoard[from] = undefined;
+      // Think about the rook. We can rely on the rank to control for color
+      // Move the rook's HP
+      newHPBoard['d' + to[1]] = newHPBoard['a' + to[1]];
+      // Remove the rook's HP
+      newHPBoard['a' + to[1]] = undefined;
+    }
+    else if (move.flags.indexOf('p') !== -1) {
+      // Promotion (which is always to queen for simplicity here)
+      // Move the HP object to the new (promotion) square
+      newHPBoard[to] = newHPBoard[from];
+      // Remove the old position
+      newHPBoard[from] = undefined;
+      // Set up the to reflect a queen
+      newHPBoard[to].type = 'q';
+      newHPBoard[to].color = move.color;
+      newHPBoard[to].hp = hpTable['q'];
+    }
+    else {
+      // A regular move
+      newHPBoard[to] = newHPBoard[from];
+      // Remove the previous
+      newHPBoard[from] = undefined;
+    }
+  }
+  return newHPBoard;
+}
+
 function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
+  // function minimax (depth, game, hpBoard, alpha, beta, isMaximisingPlayer) {
+  console.log("MINIMAX DEPTH " + depth);
+
   positionsExamined++;
 
   if (depth === 0) {
-    return -evaluateBoard(game,game.board());
+    return -evaluateBoard(game,game.board(),hpBoard);
   }
 
-  var newGameMoves = game.moves();
+  let newGameMoves = game.moves({verbose: true});
 
   if (isMaximisingPlayer) {
     var bestMove = -9999;
@@ -423,6 +543,8 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
         game.undo();
         continue;
       }
+      // let newHPBoard = newHPBoardFromMove(game,newGameMoves[i],hpBoard);
+      // let minimaxed = minimax(depth - 1, game, newHPBoard, alpha, beta, !isMaximisingPlayer);
       let minimaxed = minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer);
       bestMove = Math.max(bestMove, minimaxed);
       game.undo();
@@ -436,6 +558,8 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
     var bestMove = 9999;
     for (var i = 0; i < newGameMoves.length; i++) {
       game.move(newGameMoves[i]);
+      // let newHPBoard = newHPBoardFromMove(game,newGameMoves[i],hpBoard);
+      // let minimaxed = minimax(depth - 1, game, newHPBoard, alpha, beta, !isMaximisingPlayer);
       let minimaxed = minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer);
       bestMove = Math.min(bestMove, minimaxed);
       game.undo();
@@ -448,7 +572,8 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
   }
 }
 
-function evaluateBoard (game,board) {
+// function evaluateBoard (game,board,hpBoard) {
+  function evaluateBoard (game,board) {
   let totalEvaluation = 0;
   if (game.in_stalemate()) {
     // console.log(`evaluateBoard found STALEMATE, returning 1000000`);
@@ -457,6 +582,7 @@ function evaluateBoard (game,board) {
   else {
     for (var i = 0; i < 8; i++) {
       for (var j = 0; j < 8; j++) {
+        // totalEvaluation = totalEvaluation + getPieceValue(board[i][j], i ,j, hpBoard);
         totalEvaluation = totalEvaluation + getPieceValue(board[i][j], i ,j);
       }
     }
@@ -464,11 +590,18 @@ function evaluateBoard (game,board) {
   return totalEvaluation;
 }
 
-function getPieceValue (piece, x, y) {
+// function getPieceValue (piece, x, y, hpBoard) {
+  function getPieceValue (piece, x, y) {
   if (piece === null) {
     return 0;
   }
   let absoluteValue = getAbsoluteValue(piece, piece.color === 'w', x ,y);
+  // Here is an attempt to make the AI care about HP
+  // Currently it would really only do a sort of "all things being equal" difference?
+  // But perhaps that's actually enough?
+  // What is a board position that would evaluate this???
+  // let hp = hpBoard["abcdefgh".charAt(x) + y];
+  // absoluteValue *= hp;
   return piece.color === 'w' ? absoluteValue : -absoluteValue;
 }
 
