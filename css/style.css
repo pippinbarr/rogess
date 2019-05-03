@@ -89,9 +89,11 @@ body {
   margin-bottom: 20px;
   font-family: CGA;
   font-size: 1em;
+  line-height: 1.5em;
   color: yellow;
-  text-align: center;
+  text-align: left;
   display: none;
+  height: 2em;
 }
 
 .board-b72b1 {

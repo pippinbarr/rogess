@@ -36,24 +36,15 @@ let hpTable = {
   p: 1
 };
 let pieceNames = {
-  k: 'king',
-  q: 'queen',
-  r: 'rook',
-  b: 'bishop',
-  n: 'knight',
-  p: 'pawn'
+  k: 'King',
+  q: 'Queen',
+  r: 'Rook',
+  b: 'Bishop',
+  n: 'Knight',
+  p: 'Pawn'
 };
 
-let hpBoard = {
-  a: [],
-  b: [],
-  c: [],
-  d: [],
-  e: [],
-  f: [],
-  g: [],
-  h: []
-};
+let hpBoard = {};
 
 let missVerbs = [
   "misses", "swings and misses", "barely misses", "doesn't hit"
@@ -92,16 +83,16 @@ function setup() {
   // Set up our own representation of the board for HP business.
   // How depressing that this seems necessary.
   $('.square-55d63').each(function () {
-    let file = $(this).attr('data-square')[0];
-    let rank = $(this).attr('data-square')[1];
+    let file = $(this).attr('data-square')[1];
+    let rank = $(this).attr('data-square')[0];
     let $piece = $(this).find('img');
     if ($piece.length !== 0) {
       let color = $piece.attr('data-piece')[0];
       let type = $piece.attr('data-piece')[1].toLowerCase();
-      hpBoard[file][rank] = { type: type, color: color, hp: hpTable[type] };
+      hpBoard[`${rank}${file}`] = { title:'', type: type, color: color, level: 1, captures: 0, hp: hpTable[type], maxHP: hpTable[type], xp: 0, nextXP: 10 };
     }
     else {
-      hpBoard[file][rank] = undefined;
+      hpBoard[`${rank}${file}`] = undefined;
     }
   });
 
@@ -129,11 +120,24 @@ function squareClicked (event) {
       firstClick = false;
     }
     highlightMoves(square);
+    highlight(square);
+    updateStatusBar(square);
   }
   else if (from !== null && $(event.currentTarget).hasClass('highlight1-32417')) {
     let to = $(event.currentTarget).attr('data-square');
     moveWhite(from,to);
   }
+}
+
+function updateStatusBar(square) {
+  let piece = hpBoard[square];
+  $('#name').text(`${piece.title}${pieceNames[piece.type]}`);
+  $('#level').text(`${piece.level}`);
+  $('#hp').text(`${piece.hp}`);
+  $('#maxHP').text(`${piece.maxHP}`);
+  $('#xp').text(`${piece.xp}`);
+  $('#nextXP').text(`${piece.nextXP}`);
+  $('#captures').text(`${piece.captures}`);
 }
 
 function highlightMoves (square) {
@@ -203,12 +207,12 @@ function handleLastMove() {
   // Check for a capture
   if (lastMove.captured) {
     // If it's a capture (an attack in this game), reduce HP based on attacker's current HP
-    let damage = Math.floor(Math.random() * (hpBoard[from[0]][from[1]].hp + 1));
+    let damage = Math.floor(Math.random() * (hpBoard[from].hp + 1));
     let targetHP;
     lastMove.damage = damage;
-    hpBoard[target[0]][target[1]].hp -= damage;
+    hpBoard[target].hp -= damage;
     // Check for death
-    if (hpBoard[target[0]][target[1]].hp > 0) {
+    if (hpBoard[target].hp > 0) {
       // If they didn't die then we need to display attacking
       attackSFX.play();
       // Then undo the capture (since it didn't "take")
@@ -226,19 +230,21 @@ function handleLastMove() {
       fenArray[3] = '-'; // Really don't get how this goes wonky and needs this 'fix'
       fen = fenArray.join(' ');
       game.load(fen);
-      // Update san in last move to out notation
-      console.log(lastMove.san);
+      // Update san in last move to our notation
       lastMove.san = lastMove.san.replace('x','*');
-      console.log(lastMove.san);
     }
     else {
       // Otherwise, they died, so we need to update the HP states
       // Remove the target of the capture (this will be the same as 'to' if a standard capture)
-      hpBoard[target[0]][target[1]] = undefined;
+      hpBoard[target] = undefined;
+      // Update captures stat
+      hpBoard[from].captures++;
+      // Update XP
+
       // Move the capturing piece's HP with it to the captured square
-      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      hpBoard[to] = hpBoard[from];
       // Remove the HP information at capturing piece's previous location (there's nothing there now)
-      hpBoard[from[0]][from[1]] = undefined;
+      hpBoard[from] = undefined;
       // Play the capture sound
       captureSFX.play();
     }
@@ -249,43 +255,43 @@ function handleLastMove() {
     if (lastMove.flags.indexOf('k') !== -1) {
       // Kingside
       // Move the king's HP from the king's square, which is just the movement indicated
-      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      hpBoard[to] = hpBoard[from];
       // Remove the king's HP from the king's square
-      hpBoard[from[0]][from[1]] = undefined;
+      hpBoard[from] = undefined;
       // Think  about the rook. We can rely on the rank to control for color
       // Move the rook's HP
-      hpBoard['f'][to[1]] = hpBoard['h'][to[1]];
+      hpBoard['f' + to[1]] = hpBoard['h' + to[1]];
       // Remove the rook's HP
-      hpBoard['h'][to[1]] = undefined;
+      hpBoard['h' + to[1]] = undefined;
     }
     else if (lastMove.flags.indexOf('q') !== -1) {
       // Queenside
       // Move the king's HP from the king's square, which is just the movement indicated
-      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      hpBoard[to] = hpBoard[from];
       // Remove the king's HP from the king's square
-      hpBoard[from[0]][from[1]] = undefined;
+      hpBoard[from] = undefined;
       // Think about the rook. We can rely on the rank to control for color
       // Move the rook's HP
-      hpBoard['d'][to[1]] = hpBoard['a'][to[1]];
+      hpBoard['d' + to[1]] = hpBoard['a' + to[1]];
       // Remove the rook's HP
-      hpBoard['a'][to[1]] = undefined;
+      hpBoard['a' + to[1]] = undefined;
     }
     else if (lastMove.flags.indexOf('p') !== -1) {
       // Promotion (which is always to queen for simplicity here)
       // Move the HP object to the new (promotion) square
-      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      hpBoard[to] = hpBoard[from];
       // Remove the old position
-      hpBoard[from[0]][from[1]] = undefined;
+      hpBoard[from] = undefined;
       // Set up the to reflect a queen
-      hpBoard[to[0]][to[1]].type = 'q';
-      hpBoard[to[0]][to[1]].color = lastMove.color;
-      hpBoard[to[0]][to[1]].hp = hpTable['q'];
+      hpBoard[to].type = 'q';
+      hpBoard[to].color = lastMove.color;
+      hpBoard[to].hp = hpTable['q'];
     }
     else {
       // A regular move
-      hpBoard[to[0]][to[1]] = hpBoard[from[0]][from[1]];
+      hpBoard[to] = hpBoard[from];
       // Remove the previous
-      hpBoard[from[0]][from[1]] = undefined;
+      hpBoard[from] = undefined;
     }
     // Placement sound
     placeSFX.play();
@@ -322,7 +328,7 @@ function updatePGN () {
 
   // Deal with capture messages
   if (san.indexOf('x') !== -1) {
-    note = ` (${active} ${pieceNames[lastMove.piece]} defeated ${passive.toLowerCase()} ${pieceNames[lastMove.captured]})`;
+    note = ` (${active} ${pieceNames[lastMove.piece].toLowerCase()} defeated ${passive.toLowerCase()} ${pieceNames[lastMove.captured].toLowerCase()})`;
   }
   // Deal with attack messages
   else if (san.indexOf('*') !== -1) {
@@ -335,7 +341,7 @@ function updatePGN () {
     else {
       verb = hitVerbs[Math.floor(Math.random() * hitVerbs.length)];
     }
-    note = ` (${active} ${pieceNames[lastMove.piece]} ${verb} ${passive.toLowerCase()} ${pieceNames[lastMove.captured]})`;
+    note = ` (${active} ${pieceNames[lastMove.piece].toLowerCase()} ${verb} ${passive.toLowerCase()} ${pieceNames[lastMove.captured].toLowerCase()})`;
   }
 
   if (lastMove.color === 'w') {

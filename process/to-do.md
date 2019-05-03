@@ -5,8 +5,9 @@
 - ~~Think about promotion and HP~~
 - ~~Make attacking remove random health~~
 - ~~Handle en passant properly~~
+- ~~Add PGN/Rogue message~~
+- ~~Style it~~
 
 - Think about the AI's lack of awareness of HP in its tactics
-- Add PGN/Rogue message
-- Add status bar
-- Style it
+- Add working status bar
+- Add level-up when you capture a piece (you take its maximum HP? Its current HP?)
