@@ -99,13 +99,6 @@ function setup() {
   $('.square-55d63').on('click', squareClicked);
 }
 
-function dealgebriac(square) {
-  let file = "abcdefgh".indexOf(square[0]);
-  let rank = parseInt(square[1]);
-  let dealgebrised = ((8 - rank) * 8) + file;
-  return (8 - rank) * 2 * 8 + file;
-}
-
 function squareClicked (event) {
   // Find out the notation of the square and also the element representing the piece
   let square = $(event.currentTarget).attr('data-square');
@@ -135,8 +128,6 @@ function updateStatusBar(square) {
   $('#level').text(`${piece.level}`);
   $('#hp').text(`${piece.hp}`);
   $('#maxHP').text(`${piece.maxHP}`);
-  $('#xp').text(`${piece.xp}`);
-  $('#nextXP').text(`${piece.nextXP}`);
   $('#captures').text(`${piece.captures}`);
 }
 
