@@ -28,8 +28,8 @@ let moveCount = 0;
 let lastMove = '';
 let positionsExamined = 0;
 let hpTable = {
-  k: 11,
-  q: 10,
+  k: 10,
+  q: 9,
   r: 5,
   b: 3,
   n: 3,
@@ -232,6 +232,23 @@ function handleLastMove() {
       game.load(fen);
       // Update san in last move to our notation
       lastMove.san = lastMove.san.replace('x','*');
+
+      let $message = $(`<div class="attack-message"></div>`);
+      if (damage > 0) {
+        // Display a damage indicator
+        $message.text(`-${damage}HP`);
+      }
+      else {
+        $message.text(`MISS!`);
+      }
+      let $target = $(`.square-${target}`);
+      $target.append($message);
+      $message.animate({
+        top: `-=2em`,
+        opacity: 0,
+      },1000,() => {
+        $(this).remove();
+      });
     }
     else {
       // Otherwise, they died, so we need to update the HP states

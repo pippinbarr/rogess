@@ -20,6 +20,16 @@ body {
   background-color: black;
 }
 
+.attack-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  color: yellow;
+  font-family: CGA;
+  font-size: 1em;
+}
+
 /* MOBILE? */
 @media only screen and (max-device-width: 768px) {
   body {
