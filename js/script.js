@@ -193,12 +193,13 @@ function moveBlack() {
 
   console.log("------ REAL BLACK MOVE ------");
 
-  makeMove(move);
+  makeMove(move,false);
   console.log('AFTER BLACK',states[0]);
 
 }
 
 function undo() {
+  console.log("UNDO.")
   game.undo();
   states.shift();
 }
@@ -209,12 +210,21 @@ function makeMove(move,simulate) {
   // console.log(game.turn())
 
   // Translate the move into a proper game move
+  console.log(game.pgn())
+  console.log(game.turn())
+  console.log(game.ascii())
+  console.log(move);
+
   move = game.move(move);
+  if (move === null) {
+    console.log("INVALID MOVE");
+    return false;
+  }
   if (!simulate) {
     // Animate the move (we'll animate back if it's an attack/non-capture)
     board.position(game.fen(),true);
   }
-  // Undo it so it's not part of the game
+  // Undo it so it's not part of the game now (we'll replay it later as needed)
   game.undo();
 
   let state = copyState(states[0]);
@@ -254,6 +264,8 @@ function makeMove(move,simulate) {
     state[target].hp -= damage;
     // Check for death
     if (state[target].hp > 0) {
+      // Update san in last move to our notation
+      move.san = move.san.replace('x','*');
       // Then undo the capture (since it didn't "take")
       let skipMove = {
         from: from,
@@ -263,40 +275,22 @@ function makeMove(move,simulate) {
         type: move.piece,
         piece: move.piece,
         pass: true,
-        san: move.san.replace('x','*')
+        san: move.san
       }
       game.skip(skipMove);
 
       if (!simulate) {
-        // Update san in last move to our notation
-        move.san = move.san.replace('x','*');
-
         setTimeout(() => {
           // Play the attack sound
           attackSFX.play();
+          // Display the message
+          displayDamageMessage(target,damage);
           // Reset the board, animating it back to the previous position
           board.position(game.fen(),true);
           // Play the placement sound once the piece has animated back
           setTimeout(() => {
             placeSFX.play();
           },config.moveSpeed);
-
-          let $message = $(`<div class="attack-message"></div>`);
-          if (damage > 0) {
-            // Display a damage indicator
-            $message.text(`-${damage}HP`);
-          }
-          else {
-            $message.text(`MISS!`);
-          }
-          let $target = $(`.square-${target}`);
-          $target.append($message);
-          $message.animate({
-            top: `-=2em`,
-            opacity: 0,
-          },1000,() => {
-            $(this).remove();
-          });
         },config.moveSpeed * 1.1);
       }
     }
@@ -323,8 +317,6 @@ function makeMove(move,simulate) {
     }
   }
   else {
-    game.move(move);
-
     // If we're here then the piece just moved
     // We need to think about castling
     if (move.flags.indexOf('k') !== -1) {
@@ -368,6 +360,8 @@ function makeMove(move,simulate) {
       // Remove the previous
       state[from] = undefined;
     }
+
+    game.move(move);
     if (!simulate) {
       setTimeout(() => {
         // Placement sound
@@ -375,17 +369,16 @@ function makeMove(move,simulate) {
       },config.moveSpeed * 1.1);
     }
   }
-  // Reset the move tracking
-  from = null;
 
   if (!simulate) {
+    updatePGN(move);
+    // Reset the move tracking
+    from = null;
     if (game.turn() === 'b') {
       setTimeout(() => {
         moveBlack();
       },config.moveSpeed * 2.1);
     }
-
-    updatePGN(move);
   }
 
   states.unshift(state);
@@ -447,7 +440,7 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
 
   for(var i = 0; i < newGameMoves.length; i++) {
 
-    // console.log(`------------ROOT, DEPTH=${depth}------------`);
+    console.log(`------------ROOT, DEPTH=${depth}------------`);
 
     makeMove(newGameMoves[i],true);
 
@@ -485,7 +478,7 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
     var bestMove = -9999;
     for (var i = 0; i < newGameMoves.length; i++) {
 
-      // console.log(`------------DEPTH ${depth}------------`);
+      console.log(`------------DEPTH ${depth}------------`);
 
       makeMove(newGameMoves[i],true);
 
@@ -506,7 +499,7 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
     var bestMove = 9999;
     for (var i = 0; i < newGameMoves.length; i++) {
 
-      // console.log(`------------DEPTH ${depth}------------`);
+      console.log(`------------DEPTH ${depth}------------`);
 
       makeMove(newGameMoves[i],true);
 
@@ -587,4 +580,23 @@ function copyState(src) {
     }
   }
   return target;
+}
+
+function displayDamageMessage(target,damage) {
+  let $message = $(`<div class="attack-message"></div>`);
+  if (damage > 0) {
+    // Display a damage indicator
+    $message.text(`-${damage}HP`);
+  }
+  else {
+    $message.text(`MISS!`);
+  }
+  let $target = $(`.square-${target}`);
+  $target.append($message);
+  $message.animate({
+    top: `-=2em`,
+    opacity: 0,
+  },1000,() => {
+    $(this).remove();
+  });
 }

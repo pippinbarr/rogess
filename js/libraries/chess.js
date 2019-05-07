@@ -1004,6 +1004,7 @@ var Chess = function(fen) {
       return null;
     }
     else if (old.move.pass) {
+      console.log("Popped skip move, swapping turn from ",turn);
       turn = swap_color(turn)
       return old.move;
     }
