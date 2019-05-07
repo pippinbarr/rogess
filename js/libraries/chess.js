@@ -685,6 +685,11 @@ var Chess = function(fen) {
   function move_to_san(move, sloppy) {
     var output = '';
 
+    if (move.pass) {
+      output = move.san;
+      return output;
+    }
+
     if (move.flags & BITS.KSIDE_CASTLE) {
       output = 'O-O';
     } else if (move.flags & BITS.QSIDE_CASTLE) {
@@ -894,6 +899,14 @@ var Chess = function(fen) {
     var them = swap_color(us);
     push(move);
 
+    if (move.pass) {
+      if (turn === BLACK) {
+        move_number++;
+      }
+      turn = swap_color(turn);
+      return;
+    }
+
     board[move.to] = board[move.from];
     board[move.from] = null;
 
@@ -986,8 +999,13 @@ var Chess = function(fen) {
 
   function undo_move() {
     var old = history.pop();
+
     if (old == null) {
       return null;
+    }
+    else if (old.move.pass) {
+      turn = swap_color(turn)
+      return old.move;
     }
 
     var move = old.move;
@@ -1321,6 +1339,7 @@ var Chess = function(fen) {
         }
       }
 
+      // console.log(moves);
       return moves;
     },
 
@@ -1643,6 +1662,10 @@ var Chess = function(fen) {
       return turn;
     },
 
+    skip: function (info) {
+      make_move(info);
+    },
+
     move: function(move, options) {
       /* The move function can be called with in the following parameters:
        *
@@ -1666,7 +1689,9 @@ var Chess = function(fen) {
       if (typeof move === 'string') {
         move_obj = move_from_san(move, sloppy);
       } else if (typeof move === 'object') {
+        // console.log(move);
         var moves = generate_moves();
+        // console.log(moves);
 
         /* convert the pretty move object to an ugly move object */
         for (var i = 0, len = moves.length; i < len; i++) {
@@ -1691,7 +1716,6 @@ var Chess = function(fen) {
        * move is made
        */
       var pretty_move = make_pretty(move_obj);
-
       make_move(move_obj);
 
       return pretty_move;

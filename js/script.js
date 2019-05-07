@@ -20,7 +20,7 @@ const attackSFX = new Howl({
 
 
 let firstClick = true;
-let depth = 2;
+let depth = 3;
 let board;
 let game;
 let from;
@@ -44,7 +44,7 @@ let pieceNames = {
   p: 'Pawn'
 };
 
-let state = {};
+let states = [];
 
 let missVerbs = [
   "misses", "swings and misses", "barely misses", "doesn't hit"
@@ -82,6 +82,7 @@ function setup() {
 
   // Set up our own representation of the board for HP business.
   // How depressing that this seems necessary.
+  let state = {};
   $('.square-55d63').each(function () {
     let file = $(this).attr('data-square')[1];
     let rank = $(this).attr('data-square')[0];
@@ -89,12 +90,20 @@ function setup() {
     if ($piece.length !== 0) {
       let color = $piece.attr('data-piece')[0];
       let type = $piece.attr('data-piece')[1].toLowerCase();
-      state[`${rank}${file}`] = { title:'', type: type, color: color, level: 1, captures: 0, hp: hpTable[type], maxHP: hpTable[type], xp: 0, nextXP: 10 };
+      state[`${rank}${file}`] = {
+        hp: hpTable[type],
+        maxHP: hpTable[type],
+        type: type,
+        color: color,
+        captures: 0,
+      };
     }
     else {
       state[`${rank}${file}`] = undefined;
     }
   });
+
+  states.unshift(state);
 
   $('.square-55d63').on('click', squareClicked);
 }
@@ -123,9 +132,10 @@ function squareClicked (event) {
 }
 
 function updateStatusBar(square) {
+  let state = states[0];
   let piece = state[square];
-  $('#name').text(`${piece.title}${pieceNames[piece.type]}`);
-  $('#level').text(`${piece.level}`);
+  $('#name').text(`${pieceNames[piece.type]}`);
+  // $('#level').text(`${piece.level}`);
   $('#hp').text(`${piece.hp}`);
   $('#maxHP').text(`${piece.maxHP}`);
   $('#captures').text(`${piece.captures}`);
@@ -165,44 +175,52 @@ function moveWhite(from,to) {
     promotion: 'q' // NOTE: always promote to a queen for example simplicity
   };
 
-  lastMove = game.move(move);
+  console.log("------ REAL WHITE MOVE ------");
+
+  makeMove(move,false);
+  console.log('AFTER WHITE',states[0]);
 
   // Clear all highlights from the board (a new turn is about to begin)
   clearHighlights();
 
   // Update the board based on the new position
-  board.position(game.fen(),true);
-
-  setTimeout(() => {
-    handleMove(lastMove,true);
-  },config.moveSpeed * 1.1);
+  // board.position(game.fen(),true);
 }
 
-function copyState(src) {
-  let target = {};
-  for (let prop in src) {
-    if (src.hasOwnProperty(prop)) {
-      target[prop] = src[prop];
-      for (let prop2 in src[prop]) {
-        if (src[prop].hasOwnProperty(prop2)) {
-          target[prop][prop2] = src[prop][prop2];
-        }
-      }
-    }
-  }
-  return target;
+function moveBlack() {
+  moveCount++;
+  let move = getBlackMove();
+
+  console.log("------ REAL BLACK MOVE ------");
+
+  makeMove(move);
+  console.log('AFTER BLACK',states[0]);
+
 }
 
-function handleMove(move,apply) {
+function undo() {
+  game.undo();
+  states.shift();
+}
 
-  let workingState = state;
-  if (apply) {
-    workingState = copyState(state);
-  }
+function makeMove(move,simulate) {
+  // console.log("makeMove()",simulate);
+  // console.log(move);
+  // console.log(game.turn())
+
+  // Translate the move into a proper game move
+  move = game.move(move);
+  // Undo it so it's not part of the game
+  game.undo();
+
+  let state = copyState(states[0]);
 
   // This failed on checkmate?
   let to = move.to;
   let target = move.to;
+  let from = move.from;
+
+  // Handle en passant
   if (move.flags.indexOf('e') !== -1) {
     let file = move.to[0];
     let rank;
@@ -214,27 +232,38 @@ function handleMove(move,apply) {
     }
     target = file + rank;
   }
-  let from = move.from;
+
   // Check for a capture
   if (move.captured) {
     // If it's a capture (an attack in this game), reduce HP based on attacker's current HP
-    let damage = Math.floor(Math.random() * (workingState[from].hp + 1));
+    let damage;
+    if (simulate) {
+      damage = 0.5 * (state[from].hp + 1);
+    }
+    else {
+      damage = Math.floor(Math.random() * (state[from].hp + 1));
+    }
+    // console.log(damage);
+    // damage = 1000;
     let targetHP;
     move.damage = damage;
-    workingState[target].hp -= damage;
+    state[target].hp -= damage;
     // Check for death
-    if (workingState[target].hp > 0) {
+    if (state[target].hp > 0) {
       // Then undo the capture (since it didn't "take")
-      game.undo();
-      // Change to opposite turn
-      let fen = game.fen();
-      let fenArray = fen.split(' ');
-      fenArray[1] = game.turn() === 'w' ? 'b' : 'w';
-      fenArray[3] = '-'; // Really don't get how this goes wonky and needs this 'fix'
-      fen = fenArray.join(' ');
-      game.load(fen);
+      let skipMove = {
+        from: from,
+        to: to,
+        color: move.color,
+        flags: '',
+        type: move.piece,
+        piece: move.piece,
+        pass: true,
+        san: move.san.replace('x','*')
+      }
+      game.skip(skipMove);
 
-      if (apply) {
+      if (!simulate) {
         // Update san in last move to our notation
         move.san = move.san.replace('x','*');
         // Reset the board, animating it back to the previous position
@@ -265,68 +294,72 @@ function handleMove(move,apply) {
       }
     }
     else {
+      game.move(move);
+
       // Otherwise, they died, so we need to update the HP states
       // Remove the target of the capture (this will be the same as 'to' if a standard capture)
-      workingState[target] = undefined;
+      state[target] = undefined;
       // Update captures stat
-      workingState[from].captures++;
+      state[from].captures++;
       // Update XP
 
       // Move the capturing piece's HP with it to the captured square
-      workingState[to] = workingState[from];
+      state[to] = state[from];
       // Remove the HP information at capturing piece's previous location (there's nothing there now)
-      workingState[from] = undefined;
-      if (apply) {
+      state[from] = undefined;
+      if (simulate) {
         // Play the capture sound
         captureSFX.play();
       }
     }
   }
   else {
+    game.move(move);
+
     // If we're here then the piece just moved
     // We need to think about castling
     if (move.flags.indexOf('k') !== -1) {
       // Kingside
       // Move the king's HP from the king's square, which is just the movement indicated
-      workingState[to] = workingState[from];
+      state[to] = state[from];
       // Remove the king's HP from the king's square
-      workingState[from] = undefined;
+      state[from] = undefined;
       // Think  about the rook. We can rely on the rank to control for color
       // Move the rook's HP
-      workingState['f' + to[1]] = workingState['h' + to[1]];
+      state['f' + to[1]] = state['h' + to[1]];
       // Remove the rook's HP
-      workingState['h' + to[1]] = undefined;
+      state['h' + to[1]] = undefined;
     }
     else if (move.flags.indexOf('q') !== -1) {
       // Queenside
       // Move the king's HP from the king's square, which is just the movement indicated
-      workingState[to] = workingState[from];
+      state[to] = state[from];
       // Remove the king's HP from the king's square
-      workingState[from] = undefined;
+      state[from] = undefined;
       // Think about the rook. We can rely on the rank to control for color
       // Move the rook's HP
-      workingState['d' + to[1]] = workingState['a' + to[1]];
+      state['d' + to[1]] = state['a' + to[1]];
       // Remove the rook's HP
-      workingState['a' + to[1]] = undefined;
+      state['a' + to[1]] = undefined;
     }
     else if (move.flags.indexOf('p') !== -1) {
       // Promotion (which is always to queen for simplicity here)
       // Move the HP object to the new (promotion) square
-      workingState[to] = workingState[from];
+      state[to] = state[from];
       // Remove the old position
-      workingState[from] = undefined;
+      state[from] = undefined;
       // Set up the to reflect a queen
-      workingState[to].type = 'q';
-      workingState[to].color = move.color;
-      workingState[to].hp = hpTable['q'];
+      state[to].type = 'q';
+      state[to].color = move.color;
+      state[to].hp = hpTable['q'];
     }
     else {
       // A regular move
-      workingState[to] = workingState[from];
+      state[to] = state[from];
       // Remove the previous
-      workingState[from] = undefined;
+      state[from] = undefined;
     }
-    if (apply) {
+    if (!simulate) {
       // Placement sound
       placeSFX.play();
     }
@@ -334,7 +367,8 @@ function handleMove(move,apply) {
   // Reset the move tracking
   from = null;
 
-  if (apply) {
+  if (!simulate) {
+    board.position(game.fen());
     if (game.turn() === 'b') {
       setTimeout(() => {
         moveBlack();
@@ -343,17 +377,12 @@ function handleMove(move,apply) {
 
     updatePGN(move);
   }
-}
 
-function moveBlack() {
-  moveCount++;
-  let move = getBlackMove();
-  lastMove = game.move(move);
-  board.position(game.fen(),true);
+  states.unshift(state);
 
-  setTimeout(() => {
-    handleMove(lastMove,true);
-  },config.moveSpeed * 1.1);
+  // console.log(`${game.pgn()}`);
+  // console.log(game.ascii());
+  // console.log(state);
 }
 
 function updatePGN (move) {
@@ -398,7 +427,6 @@ function getBlackMove() {
 }
 
 function minimaxRoot (depth, game, isMaximisingPlayer) {
-  // console.log("ROOT");
   var newGameMoves = game.moves({verbose: true});
   var evaluations = [];
 
@@ -408,23 +436,22 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
   // console.log(`Starting depth is ${depth}`);
 
   for(var i = 0; i < newGameMoves.length; i++) {
-    var newGameMove = newGameMoves[i];
-    game.move(newGameMove);
-    if (game.in_stalemate()) {
-      game.undo();
-      continue;
-    }
-    // let newstate = newstateFromMove(game,newGameMove,state);
-    // var value = minimax(depth - 1, game, newstate, -10000, 10000, !isMaximisingPlayer);
+
+    // console.log(`------------ROOT, DEPTH=${depth}------------`);
+
+    makeMove(newGameMoves[i],true);
+
     var value = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
     if (game.in_check()) {
       value += 5;
     }
     evaluations.push({move: newGameMoves[i], evaluation: value});
-    game.undo();
+
+    undo();
+
     if(value >= bestMove) {
       bestMove = value;
-      bestMoveFound = newGameMove;
+      bestMoveFound = newGameMoves[i];
     }
   }
   return bestMoveFound;
@@ -434,27 +461,31 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
   // function minimax (depth, game, state, alpha, beta, isMaximisingPlayer) {
   // console.log("MINIMAX DEPTH " + depth);
 
+
   positionsExamined++;
 
   if (depth === 0) {
-    return -evaluateBoard(game,game.board(),state);
+    return -evaluateBoard(game,game.board());
   }
+
 
   let newGameMoves = game.moves({verbose: true});
 
   if (isMaximisingPlayer) {
     var bestMove = -9999;
     for (var i = 0; i < newGameMoves.length; i++) {
-      game.move(newGameMoves[i]);
-      if (game.in_stalemate()) {
-        game.undo();
-        continue;
-      }
+
+      // console.log(`------------DEPTH ${depth}------------`);
+
+      makeMove(newGameMoves[i],true);
+
       // let newstate = newstateFromMove(game,newGameMoves[i],state);
       // let minimaxed = minimax(depth - 1, game, newstate, alpha, beta, !isMaximisingPlayer);
       let minimaxed = minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer);
       bestMove = Math.max(bestMove, minimaxed);
-      game.undo();
+
+      undo();
+
       alpha = Math.max(alpha, bestMove);
       if (beta <= alpha) {
         return bestMove;
@@ -464,12 +495,16 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
   } else {
     var bestMove = 9999;
     for (var i = 0; i < newGameMoves.length; i++) {
-      game.move(newGameMoves[i]);
-      // let newstate = newstateFromMove(game,newGameMoves[i],state);
-      // let minimaxed = minimax(depth - 1, game, newstate, alpha, beta, !isMaximisingPlayer);
+
+      // console.log(`------------DEPTH ${depth}------------`);
+
+      makeMove(newGameMoves[i],true);
+
       let minimaxed = minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer);
       bestMove = Math.min(bestMove, minimaxed);
-      game.undo();
+
+      undo();
+
       beta = Math.min(beta, bestMove);
       if (beta <= alpha) {
         return bestMove;
@@ -527,4 +562,19 @@ function getAbsoluteValue (piece, isWhite, x ,y) {
     return 900 + ( isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x] );
   }
   throw "Unknown piece type: " + piece.type;
+}
+
+function copyState(src) {
+  let target = {};
+  for (let prop in src) {
+    if (src.hasOwnProperty(prop)) {
+      target[prop] = {};
+      for (let prop2 in src[prop]) {
+        if (src[prop].hasOwnProperty(prop2)) {
+          target[prop][prop2] = src[prop][prop2];
+        }
+      }
+    }
+  }
+  return target;
 }
