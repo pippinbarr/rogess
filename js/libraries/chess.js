@@ -1,37 +1,37 @@
 /*
- * Copyright (c) 2018, Jeff Hlywa (jhlywa@gmail.com)
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- *----------------------------------------------------------------------------*/
+* Copyright (c) 2018, Jeff Hlywa (jhlywa@gmail.com)
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions are met:
+*
+* 1. Redistributions of source code must retain the above copyright notice,
+*    this list of conditions and the following disclaimer.
+* 2. Redistributions in binary form must reproduce the above copyright notice,
+*    this list of conditions and the following disclaimer in the documentation
+*    and/or other materials provided with the distribution.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
+*
+*----------------------------------------------------------------------------*/
 
 /* minified license below  */
 
 /* @license
- * Copyright (c) 2018, Jeff Hlywa (jhlywa@gmail.com)
- * Released under the BSD license
- * https://github.com/jhlywa/chess.js/blob/master/LICENSE
- */
+* Copyright (c) 2018, Jeff Hlywa (jhlywa@gmail.com)
+* Released under the BSD license
+* https://github.com/jhlywa/chess.js/blob/master/LICENSE
+*/
 
 var Chess = function(fen) {
   var BLACK = 'b';
@@ -49,7 +49,7 @@ var Chess = function(fen) {
   var SYMBOLS = 'pnbrqkPNBRQK';
 
   var DEFAULT_POSITION =
-    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
   var POSSIBLE_RESULTS = ['1-0', '0-1', '1/2-1/2', '*'];
 
@@ -69,38 +69,38 @@ var Chess = function(fen) {
   // prettier-ignore
   var ATTACKS = [
     20, 0, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0, 0,20, 0,
-     0,20, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0,20, 0, 0,
-     0, 0,20, 0, 0, 0, 0, 24,  0, 0, 0, 0,20, 0, 0, 0,
-     0, 0, 0,20, 0, 0, 0, 24,  0, 0, 0,20, 0, 0, 0, 0,
-     0, 0, 0, 0,20, 0, 0, 24,  0, 0,20, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0,20, 2, 24,  2,20, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 2,53, 56, 53, 2, 0, 0, 0, 0, 0, 0,
+    0,20, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0,20, 0, 0,
+    0, 0,20, 0, 0, 0, 0, 24,  0, 0, 0, 0,20, 0, 0, 0,
+    0, 0, 0,20, 0, 0, 0, 24,  0, 0, 0,20, 0, 0, 0, 0,
+    0, 0, 0, 0,20, 0, 0, 24,  0, 0,20, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0,20, 2, 24,  2,20, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 2,53, 56, 53, 2, 0, 0, 0, 0, 0, 0,
     24,24,24,24,24,24,56,  0, 56,24,24,24,24,24,24, 0,
-     0, 0, 0, 0, 0, 2,53, 56, 53, 2, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0,20, 2, 24,  2,20, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0,20, 0, 0, 24,  0, 0,20, 0, 0, 0, 0, 0,
-     0, 0, 0,20, 0, 0, 0, 24,  0, 0, 0,20, 0, 0, 0, 0,
-     0, 0,20, 0, 0, 0, 0, 24,  0, 0, 0, 0,20, 0, 0, 0,
-     0,20, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0,20, 0, 0,
+    0, 0, 0, 0, 0, 2,53, 56, 53, 2, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0,20, 2, 24,  2,20, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0,20, 0, 0, 24,  0, 0,20, 0, 0, 0, 0, 0,
+    0, 0, 0,20, 0, 0, 0, 24,  0, 0, 0,20, 0, 0, 0, 0,
+    0, 0,20, 0, 0, 0, 0, 24,  0, 0, 0, 0,20, 0, 0, 0,
+    0,20, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0,20, 0, 0,
     20, 0, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0, 0,20
   ];
 
   // prettier-ignore
   var RAYS = [
-     17,  0,  0,  0,  0,  0,  0, 16,  0,  0,  0,  0,  0,  0, 15, 0,
-      0, 17,  0,  0,  0,  0,  0, 16,  0,  0,  0,  0,  0, 15,  0, 0,
-      0,  0, 17,  0,  0,  0,  0, 16,  0,  0,  0,  0, 15,  0,  0, 0,
-      0,  0,  0, 17,  0,  0,  0, 16,  0,  0,  0, 15,  0,  0,  0, 0,
-      0,  0,  0,  0, 17,  0,  0, 16,  0,  0, 15,  0,  0,  0,  0, 0,
-      0,  0,  0,  0,  0, 17,  0, 16,  0, 15,  0,  0,  0,  0,  0, 0,
-      0,  0,  0,  0,  0,  0, 17, 16, 15,  0,  0,  0,  0,  0,  0, 0,
-      1,  1,  1,  1,  1,  1,  1,  0, -1, -1,  -1,-1, -1, -1, -1, 0,
-      0,  0,  0,  0,  0,  0,-15,-16,-17,  0,  0,  0,  0,  0,  0, 0,
-      0,  0,  0,  0,  0,-15,  0,-16,  0,-17,  0,  0,  0,  0,  0, 0,
-      0,  0,  0,  0,-15,  0,  0,-16,  0,  0,-17,  0,  0,  0,  0, 0,
-      0,  0,  0,-15,  0,  0,  0,-16,  0,  0,  0,-17,  0,  0,  0, 0,
-      0,  0,-15,  0,  0,  0,  0,-16,  0,  0,  0,  0,-17,  0,  0, 0,
-      0,-15,  0,  0,  0,  0,  0,-16,  0,  0,  0,  0,  0,-17,  0, 0,
+    17,  0,  0,  0,  0,  0,  0, 16,  0,  0,  0,  0,  0,  0, 15, 0,
+    0, 17,  0,  0,  0,  0,  0, 16,  0,  0,  0,  0,  0, 15,  0, 0,
+    0,  0, 17,  0,  0,  0,  0, 16,  0,  0,  0,  0, 15,  0,  0, 0,
+    0,  0,  0, 17,  0,  0,  0, 16,  0,  0,  0, 15,  0,  0,  0, 0,
+    0,  0,  0,  0, 17,  0,  0, 16,  0,  0, 15,  0,  0,  0,  0, 0,
+    0,  0,  0,  0,  0, 17,  0, 16,  0, 15,  0,  0,  0,  0,  0, 0,
+    0,  0,  0,  0,  0,  0, 17, 16, 15,  0,  0,  0,  0,  0,  0, 0,
+    1,  1,  1,  1,  1,  1,  1,  0, -1, -1,  -1,-1, -1, -1, -1, 0,
+    0,  0,  0,  0,  0,  0,-15,-16,-17,  0,  0,  0,  0,  0,  0, 0,
+    0,  0,  0,  0,  0,-15,  0,-16,  0,-17,  0,  0,  0,  0,  0, 0,
+    0,  0,  0,  0,-15,  0,  0,-16,  0,  0,-17,  0,  0,  0,  0, 0,
+    0,  0,  0,-15,  0,  0,  0,-16,  0,  0,  0,-17,  0,  0,  0, 0,
+    0,  0,-15,  0,  0,  0,  0,-16,  0,  0,  0,  0,-17,  0,  0, 0,
+    0,-15,  0,  0,  0,  0,  0,-16,  0,  0,  0,  0,  0,-17,  0, 0,
     -15,  0,  0,  0,  0,  0,  0,-16,  0,  0,  0,  0,  0,  0,-17
   ];
 
@@ -169,8 +169,8 @@ var Chess = function(fen) {
   var header = {};
 
   /* if the user passes in a fen string, load it, else default to
-   * starting position
-   */
+  * starting position
+  */
   if (typeof fen === 'undefined') {
     load(DEFAULT_POSITION);
   } else {
@@ -252,10 +252,10 @@ var Chess = function(fen) {
   }
 
   /* TODO: this function is pretty much crap - it validates structure but
-   * completely ignores content (e.g. doesn't verify that each side has a king)
-   * ... we should rewrite this, and ditch the silly error_number field while
-   * we're at it
-   */
+  * completely ignores content (e.g. doesn't verify that each side has a king)
+  * ... we should rewrite this, and ditch the silly error_number field while
+  * we're at it
+  */
   function validate_fen(fen) {
     var errors = {
       0: 'No errors.',
@@ -409,11 +409,11 @@ var Chess = function(fen) {
   }
 
   /* called when the initial board setup is changed with put() or remove().
-   * modifies the SetUp and FEN properties of the header object.  if the FEN is
-   * equal to the default position, the SetUp and FEN are deleted
-   * the setup is only updated if history.length is zero, ie moves haven't been
-   * made.
-   */
+  * modifies the SetUp and FEN properties of the header object.  if the FEN is
+  * equal to the default position, the SetUp and FEN are deleted
+  * the setup is only updated if history.length is zero, ie moves haven't been
+  * made.
+  */
   function update_setup(fen) {
     if (history.length > 0) return;
 
@@ -532,9 +532,9 @@ var Chess = function(fen) {
 
     /* do we want legal moves? */
     var legal =
-      typeof options !== 'undefined' && 'legal' in options
-        ? options.legal
-        : true;
+    typeof options !== 'undefined' && 'legal' in options
+    ? options.legal
+    : true;
 
     /* are we generating moves for a single square? */
     if (typeof options !== 'undefined' && 'square' in options) {
@@ -607,8 +607,8 @@ var Chess = function(fen) {
     }
 
     /* check for castling if: a) we're generating all moves, or b) we're doing
-     * single square move generation on the king's square
-     */
+    * single square move generation on the king's square
+    */
     if ((!single_square || last_sq === kings[us]) && kings[us] !== -1) {
       /* king-side castling */
 
@@ -649,8 +649,8 @@ var Chess = function(fen) {
     }
 
     /* return all pseudo-legal moves (this includes moves that allow the king
-     * to be captured)
-     */
+    * to be captured)
+    */
     if (!legal) {
       // console.log("generate_moves returning !legal moves...")
       return moves;
@@ -673,19 +673,19 @@ var Chess = function(fen) {
   }
 
   /* convert a move from 0x88 coordinates to Standard Algebraic Notation
-   * (SAN)
-   *
-   * @param {boolean} sloppy Use the sloppy SAN generator to work around over
-   * disambiguation bugs in Fritz and Chessbase.  See below:
-   *
-   * r1bqkbnr/ppp2ppp/2n5/1B1pP3/4P3/8/PPPP2PP/RNBQK1NR b KQkq - 2 4
-   * 4. ... Nge7 is overly disambiguated because the knight on c6 is pinned
-   * 4. ... Ne7 is technically the valid SAN
-   */
+  * (SAN)
+  *
+  * @param {boolean} sloppy Use the sloppy SAN generator to work around over
+  * disambiguation bugs in Fritz and Chessbase.  See below:
+  *
+  * r1bqkbnr/ppp2ppp/2n5/1B1pP3/4P3/8/PPPP2PP/RNBQK1NR b KQkq - 2 4
+  * 4. ... Nge7 is overly disambiguated because the knight on c6 is pinned
+  * 4. ... Ne7 is technically the valid SAN
+  */
   function move_to_san(move, sloppy) {
     var output = '';
 
-    if (move.pass) {
+    if (move.skip) {
       output = move.san;
       return output;
     }
@@ -845,10 +845,10 @@ var Chess = function(fen) {
 
   function in_threefold_repetition() {
     /* TODO: while this function is fine for casual use, a better
-     * implementation would use a Zobrist key (instead of FEN). the
-     * Zobrist key would be maintained in the make_move/undo_move functions,
-     * avoiding the costly that we do below.
-     */
+    * implementation would use a Zobrist key (instead of FEN). the
+    * Zobrist key would be maintained in the make_move/undo_move functions,
+    * avoiding the costly that we do below.
+    */
     var moves = [];
     var positions = {};
     var repetition = false;
@@ -861,11 +861,11 @@ var Chess = function(fen) {
 
     while (true) {
       /* remove the last two fields in the FEN string, they're not needed
-       * when checking for draw by rep */
+      * when checking for draw by rep */
       var fen = generate_fen()
-        .split(' ')
-        .slice(0, 4)
-        .join(' ');
+      .split(' ')
+      .slice(0, 4)
+      .join(' ');
 
       /* has the position occurred three or move times */
       positions[fen] = fen in positions ? positions[fen] + 1 : 1;
@@ -899,23 +899,17 @@ var Chess = function(fen) {
     var them = swap_color(us);
     push(move);
 
-    if (move.pass) {
-      if (turn === BLACK) {
-        move_number++;
-      }
-      turn = swap_color(turn);
-      return;
-    }
+    if (move.to !== move.from) {
+      board[move.to] = board[move.from];
+      board[move.from] = null;
 
-    board[move.to] = board[move.from];
-    board[move.from] = null;
-
-    /* if ep capture, remove the captured pawn */
-    if (move.flags & BITS.EP_CAPTURE) {
-      if (turn === BLACK) {
-        board[move.to - 16] = null;
-      } else {
-        board[move.to + 16] = null;
+      /* if ep capture, remove the captured pawn */
+      if (move.flags & BITS.EP_CAPTURE) {
+        if (turn === BLACK) {
+          board[move.to - 16] = null;
+        } else {
+          board[move.to + 16] = null;
+        }
       }
     }
 
@@ -959,7 +953,7 @@ var Chess = function(fen) {
     }
 
     /* turn off castling if we capture a rook */
-    if (castling[them]) {
+    if (move.to !== move.from && castling[them]) {
       for (var i = 0, len = ROOKS[them].length; i < len; i++) {
         if (
           move.to === ROOKS[them][i].square &&
@@ -972,7 +966,7 @@ var Chess = function(fen) {
     }
 
     /* if big pawn move, update the en passant square */
-    if (move.flags & BITS.BIG_PAWN) {
+    if (move.to !== move.from && move.flags & BITS.BIG_PAWN) {
       if (turn === 'b') {
         ep_square = move.to - 16;
       } else {
@@ -1003,11 +997,6 @@ var Chess = function(fen) {
     if (old == null) {
       return null;
     }
-    else if (old.move.pass) {
-      console.log("Popped skip move, swapping turn from ",turn);
-      turn = swap_color(turn)
-      return old.move;
-    }
 
     var move = old.move;
     kings = old.kings;
@@ -1022,9 +1011,10 @@ var Chess = function(fen) {
 
     board[move.from] = board[move.to];
     board[move.from].type = move.piece; // to undo any promotions
-    board[move.to] = null;
 
-    if (move.flags & BITS.CAPTURE) {
+    if (move.to !== move.from) board[move.to] = null;
+
+    if (move.to !== move.from && move.flags & BITS.CAPTURE) {
       board[move.to] = { type: move.captured, color: them };
     } else if (move.flags & BITS.EP_CAPTURE) {
       var index;
@@ -1036,7 +1026,7 @@ var Chess = function(fen) {
       board[index] = { type: PAWN, color: them };
     }
 
-    if (move.flags & (BITS.KSIDE_CASTLE | BITS.QSIDE_CASTLE)) {
+    if (move.to !== move.from && move.flags & (BITS.KSIDE_CASTLE | BITS.QSIDE_CASTLE)) {
       var castling_to, castling_from;
       if (move.flags & BITS.KSIDE_CASTLE) {
         castling_to = move.to + 1;
@@ -1071,8 +1061,8 @@ var Chess = function(fen) {
       var ambig_piece = moves[i].piece;
 
       /* if a move of the same piece type ends on the same to square, we'll
-       * need to add a disambiguator to the algebraic notation
-       */
+      * need to add a disambiguator to the algebraic notation
+      */
       if (piece === ambig_piece && from !== ambig_from && to === ambig_to) {
         ambiguities++;
 
@@ -1088,14 +1078,14 @@ var Chess = function(fen) {
 
     if (ambiguities > 0) {
       /* if there exists a similar moving piece on the same rank and file as
-       * the move in question, use the square as the disambiguator
-       */
+      * the move in question, use the square as the disambiguator
+      */
       if (same_rank > 0 && same_file > 0) {
         return algebraic(from);
       } else if (same_file > 0) {
         /* if the moving piece rests on the same file, use the rank symbol as the
-       * disambiguator
-       */
+        * disambiguator
+        */
         return algebraic(from).charAt(1);
       } else {
         /* else use the file symbol */
@@ -1121,7 +1111,7 @@ var Chess = function(fen) {
         var piece = board[i].type;
         var color = board[i].color;
         var symbol =
-          color === WHITE ? piece.toUpperCase() : piece.toLowerCase();
+        color === WHITE ? piece.toUpperCase() : piece.toLowerCase();
         s += ' ' + symbol + ' ';
       }
 
@@ -1181,19 +1171,19 @@ var Chess = function(fen) {
   }
 
   /*****************************************************************************
-   * UTILITY FUNCTIONS
-   ****************************************************************************/
+  * UTILITY FUNCTIONS
+  ****************************************************************************/
   function rank(i) {
     return i >> 4;
   }
 
   function file(i) {
-    return i & 15;
+    return i & 15; // 01111
   }
 
   function algebraic(i) {
     var f = file(i),
-      r = rank(i);
+    r = rank(i);
     return 'abcdefgh'.substring(f, f + 1) + '87654321'.substring(r, r + 1);
   }
 
@@ -1243,8 +1233,8 @@ var Chess = function(fen) {
   }
 
   /*****************************************************************************
-   * DEBUGGING UTILITIES
-   ****************************************************************************/
+  * DEBUGGING UTILITIES
+  ****************************************************************************/
   function perft(depth) {
     var moves = generate_moves({ legal: false });
     var nodes = 0;
@@ -1268,8 +1258,8 @@ var Chess = function(fen) {
 
   return {
     /***************************************************************************
-     * PUBLIC CONSTANTS (is there a better way to do this?)
-     **************************************************************************/
+    * PUBLIC CONSTANTS (is there a better way to do this?)
+    **************************************************************************/
     WHITE: WHITE,
     BLACK: BLACK,
     PAWN: PAWN,
@@ -1280,11 +1270,11 @@ var Chess = function(fen) {
     KING: KING,
     SQUARES: (function() {
       /* from the ECMA-262 spec (section 12.6.4):
-                 * "The mechanics of enumerating the properties ... is
-                 * implementation dependent"
-                 * so: for (var sq in SQUARES) { keys.push(sq); } might not be
-                 * ordered correctly
-                 */
+      * "The mechanics of enumerating the properties ... is
+      * implementation dependent"
+      * so: for (var sq in SQUARES) { keys.push(sq); } might not be
+      * ordered correctly
+      */
       var keys = [];
       for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
         if (i & 0x88) {
@@ -1298,8 +1288,8 @@ var Chess = function(fen) {
     FLAGS: FLAGS,
 
     /***************************************************************************
-     * PUBLIC API
-     **************************************************************************/
+    * PUBLIC API
+    **************************************************************************/
     load: function(fen) {
       return load(fen);
     },
@@ -1314,12 +1304,12 @@ var Chess = function(fen) {
 
     moves: function(options) {
       /* The internal representation of a chess move is in 0x88 format, and
-       * not meant to be human-readable.  The code below converts the 0x88
-       * square coordinates to algebraic coordinates.  It also prunes an
-       * unnecessary move keys resulting from a verbose call.
-       */
+      * not meant to be human-readable.  The code below converts the 0x88
+      * square coordinates to algebraic coordinates.  It also prunes an
+      * unnecessary move keys resulting from a verbose call.
+      */
 
-       // console.log("generating ugly_moves with generate_moves()...")
+      // console.log("generating ugly_moves with generate_moves()...")
       var ugly_moves = generate_moves(options);
       // console.log("generate_moves() returned these ugly_moves...")
       // console.log(ugly_moves);
@@ -1327,8 +1317,8 @@ var Chess = function(fen) {
 
       for (var i = 0, len = ugly_moves.length; i < len; i++) {
         /* does the user want a full move object (most likely not), or just
-         * SAN
-         */
+        * SAN
+        */
         if (
           typeof options !== 'undefined' &&
           'verbose' in options &&
@@ -1393,7 +1383,7 @@ var Chess = function(fen) {
 
     board: function() {
       var output = [],
-        row = [];
+      row = [];
 
       for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
         if (board[i] == null) {
@@ -1413,24 +1403,24 @@ var Chess = function(fen) {
 
     pgn: function(options) {
       /* using the specification from http://www.chessclub.com/help/PGN-spec
-       * example for html usage: .pgn({ max_width: 72, newline_char: "<br />" })
-       */
+      * example for html usage: .pgn({ max_width: 72, newline_char: "<br />" })
+      */
       var newline =
-        typeof options === 'object' && typeof options.newline_char === 'string'
-          ? options.newline_char
-          : '\n';
+      typeof options === 'object' && typeof options.newline_char === 'string'
+      ? options.newline_char
+      : '\n';
       var max_width =
-        typeof options === 'object' && typeof options.max_width === 'number'
-          ? options.max_width
-          : 0;
+      typeof options === 'object' && typeof options.max_width === 'number'
+      ? options.max_width
+      : 0;
       var result = [];
       var header_exists = false;
 
       /* add the PGN header headerrmation */
       for (var i in header) {
         /* TODO: order of enumerated properties in header object is not
-         * guaranteed, see ECMA-262 spec (section 12.6.4)
-         */
+        * guaranteed, see ECMA-262 spec (section 12.6.4)
+        */
         result.push('[' + i + ' "' + header[i] + '"]' + newline);
         header_exists = true;
       }
@@ -1478,8 +1468,8 @@ var Chess = function(fen) {
       }
 
       /* history should be back to what is was before we started generating PGN,
-       * so join together moves
-       */
+      * so join together moves
+      */
       if (max_width === 0) {
         return result.join('') + moves.join(' ');
       }
@@ -1511,9 +1501,9 @@ var Chess = function(fen) {
       // allow the user to specify the sloppy move parser to work around over
       // disambiguation bugs in Fritz and Chessbase
       var sloppy =
-        typeof options !== 'undefined' && 'sloppy' in options
-          ? options.sloppy
-          : false;
+      typeof options !== 'undefined' && 'sloppy' in options
+      ? options.sloppy
+      : false;
 
       function mask(str) {
         return str.replace(/\\/g, '\\');
@@ -1528,10 +1518,10 @@ var Chess = function(fen) {
 
       function parse_pgn_header(header, options) {
         var newline_char =
-          typeof options === 'object' &&
-          typeof options.newline_char === 'string'
-            ? options.newline_char
-            : '\r?\n';
+        typeof options === 'object' &&
+        typeof options.newline_char === 'string'
+        ? options.newline_char
+        : '\r?\n';
         var header_obj = {};
         var headers = header.split(new RegExp(mask(newline_char)));
         var key = '';
@@ -1549,26 +1539,26 @@ var Chess = function(fen) {
       }
 
       var newline_char =
-        typeof options === 'object' && typeof options.newline_char === 'string'
-          ? options.newline_char
-          : '\r?\n';
+      typeof options === 'object' && typeof options.newline_char === 'string'
+      ? options.newline_char
+      : '\r?\n';
 
       // RegExp to split header. Takes advantage of the fact that header and movetext
       // will always have a blank line between them (ie, two newline_char's).
       // With default newline_char, will equal: /^(\[((?:\r?\n)|.)*\])(?:\r?\n){2}/
       var header_regex = new RegExp(
         '^(\\[((?:' +
-          mask(newline_char) +
-          ')|.)*\\])' +
-          '(?:' +
-          mask(newline_char) +
-          '){2}'
+        mask(newline_char) +
+        ')|.)*\\])' +
+        '(?:' +
+        mask(newline_char) +
+        '){2}'
       );
 
       // If no header given, begin with moves.
       var header_string = header_regex.test(pgn)
-        ? header_regex.exec(pgn)[1]
-        : '';
+      ? header_regex.exec(pgn)[1]
+      : '';
 
       // Put the board in the starting position
       reset();
@@ -1590,8 +1580,8 @@ var Chess = function(fen) {
 
       /* delete header to get the moves */
       var ms = pgn
-        .replace(header_string, '')
-        .replace(new RegExp(mask(newline_char), 'g'), ' ');
+      .replace(header_string, '')
+      .replace(new RegExp(mask(newline_char), 'g'), ' ');
 
       /* delete comments */
       ms = ms.replace(/(\{[^}]+\})+?/g, '');
@@ -1616,17 +1606,17 @@ var Chess = function(fen) {
 
       /* delete empty entries */
       moves = moves
-        .join(',')
-        .replace(/,,+/g, ',')
-        .split(',');
+      .join(',')
+      .replace(/,,+/g, ',')
+      .split(',');
       var move = '';
 
       for (var half_move = 0; half_move < moves.length - 1; half_move++) {
         move = move_from_san(moves[half_move], sloppy);
 
         /* move not possible! (don't clear the board to examine to show the
-         * latest valid position)
-         */
+        * latest valid position)
+        */
         if (move == null) {
           return false;
         } else {
@@ -1669,21 +1659,21 @@ var Chess = function(fen) {
 
     move: function(move, options) {
       /* The move function can be called with in the following parameters:
-       *
-       * .move('Nxb7')      <- where 'move' is a case-sensitive SAN string
-       *
-       * .move({ from: 'h7', <- where the 'move' is a move object (additional
-       *         to :'h8',      fields are ignored)
-       *         promotion: 'q',
-       *      })
-       */
+      *
+      * .move('Nxb7')      <- where 'move' is a case-sensitive SAN string
+      *
+      * .move({ from: 'h7', <- where the 'move' is a move object (additional
+      *         to :'h8',      fields are ignored)
+      *         promotion: 'q',
+      *      })
+      */
 
       // allow the user to specify the sloppy move parser to work around over
       // disambiguation bugs in Fritz and Chessbase
       var sloppy =
-        typeof options !== 'undefined' && 'sloppy' in options
-          ? options.sloppy
-          : false;
+      typeof options !== 'undefined' && 'sloppy' in options
+      ? options.sloppy
+      : false;
 
       var move_obj = null;
 
@@ -1700,11 +1690,21 @@ var Chess = function(fen) {
             move.from === algebraic(moves[i].from) &&
             move.to === algebraic(moves[i].to) &&
             (!('promotion' in moves[i]) ||
-              move.promotion === moves[i].promotion)
+            move.promotion === moves[i].promotion)
           ) {
             move_obj = moves[i];
             break;
           }
+        }
+      }
+
+      if (move_obj === null && move.from === move.to) {
+        move_obj = {
+          from: SQUARES[move.from],
+          to: SQUARES[move.to],
+          color: move.color,
+          flags: 0,
+          piece: move.piece
         }
       }
 
@@ -1714,10 +1714,12 @@ var Chess = function(fen) {
       }
 
       /* need to make a copy of move because we can't generate SAN after the
-       * move is made
-       */
+      * move is made
+      */
       var pretty_move = make_pretty(move_obj);
       make_move(move_obj);
+
+      console.log(move_obj);
 
       return pretty_move;
     },
@@ -1760,9 +1762,9 @@ var Chess = function(fen) {
       var reversed_history = [];
       var move_history = [];
       var verbose =
-        typeof options !== 'undefined' &&
-        'verbose' in options &&
-        options.verbose;
+      typeof options !== 'undefined' &&
+      'verbose' in options &&
+      options.verbose;
 
       while (history.length > 0) {
         reversed_history.push(undo_move());
@@ -1784,10 +1786,10 @@ var Chess = function(fen) {
 };
 
 /* export Chess object if using node or any other CommonJS compatible
- * environment */
+* environment */
 if (typeof exports !== 'undefined') exports.Chess = Chess;
 /* export Chess object for any RequireJS compatible environment */
 if (typeof define !== 'undefined')
-  define(function() {
-    return Chess;
-  });
+define(function() {
+  return Chess;
+});

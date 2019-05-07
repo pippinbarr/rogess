@@ -105,6 +105,73 @@ function setup() {
 
   states.unshift(state);
 
+  // Horrible testbed for real/simulated moves that has proved nothing so far
+
+  // game.load('rnbqkb1r/1ppppppp/5n2/p3P3/8/8/PPPP1PPP/RNBQKBNR w kq - 0 1');
+  // board.position(game.fen());
+
+  let moves = [
+    // {from: 'e2', to: 'e4'},
+    // {from: 'g8', to: 'f6'},
+    // {from: 'e4', to: 'e5'},
+    // {from: 'a7', to: 'a5'},
+    // {from: 'e5', to: 'f6'},
+    // {from: 'a8', to: 'a6'}, // THIS MOVE Ra6 PLACES A PAWN ON A7??? WTF?
+    // IT ONLY HAPPEN ON THE A-FILE??? (If you mirror this on H it does happen)
+
+    // It seems to be to do with the direction of capture by a pawn...
+    // Yikes.
+    {from: 'd2', to: 'd4'},
+    {from: 'b8', to: 'c6'},
+    {from: 'd4', to: 'd5'},
+    {from: 'h7', to: 'h5'},
+    {from: 'd5', to: 'c6'},
+    {from: 'h8', to: 'h6'},
+
+    // {from: 'd5', to: 'd4'},
+    // {from: 'e5', to: 'f6'},
+    // {from: 'd4', to: 'd3'},
+    // {from: 'c2', to: 'd3'}
+  ];
+  let i = 0;
+
+  $(document).on('keydown',(e) => {
+    switch (e.key) {
+      case 'u':
+      undo();
+      // console.log(game.ascii());
+      board.position(game.fen());
+      i--;
+      break;
+
+      case 'r':
+      undo();
+      // console.log(game.ascii());
+      i--;
+      break;
+
+      case 'm':
+      makeMove(moves[i],false);
+      // console.log(">>> AFTER MAKEMOVE COMPLETE");
+      // console.log("Move:",moves[i]);
+      // console.log(game.pgn())
+      // console.log(game.turn())
+      // console.log(game.fen())
+      // console.log(game.ascii())
+      // console.log(game.ascii());
+      // console.log(game.pgn());
+      i++;
+      break;
+
+      case 's':
+      makeMove(moves[i],true);
+      // console.log(game.ascii());
+      // console.log(game.pgn());
+      i++;
+      break;
+    }
+  });
+
   $('.square-55d63').on('click', squareClicked);
 }
 
@@ -175,57 +242,72 @@ function moveWhite(from,to) {
     promotion: 'q' // NOTE: always promote to a queen for example simplicity
   };
 
-  console.log("------ REAL WHITE MOVE ------");
+  // console.log("------ REAL WHITE MOVE ------");
 
   makeMove(move,false);
-  console.log('AFTER WHITE',states[0]);
+  // console.log('AFTER WHITE',states[0]);
 
   // Clear all highlights from the board (a new turn is about to begin)
   clearHighlights();
 
   // Update the board based on the new position
-  // board.position(game.fen(),true);
+
+  setTimeout(() => {
+    moveBlack();
+  },config.moveSpeed * 2.1);
+
 }
 
 function moveBlack() {
   moveCount++;
   let move = getBlackMove();
 
-  console.log("------ REAL BLACK MOVE ------");
+  // console.log("------ REAL BLACK MOVE ------");
 
   makeMove(move,false);
-  console.log('AFTER BLACK',states[0]);
+  // console.log('AFTER BLACK',states[0]);
 
 }
 
 function undo() {
-  console.log("UNDO.")
+  // console.log("UNDO.")
   game.undo();
   states.shift();
 }
 
 function makeMove(move,simulate) {
-  // console.log("makeMove()",simulate);
-  // console.log(move);
+  // console.log(">>> BEFORE MAKEMOVE SIMULATED MOVE");
+  // console.log("Move:",move);
+  // console.log(game.pgn())
   // console.log(game.turn())
-
-  // Translate the move into a proper game move
-  console.log(game.pgn())
-  console.log(game.turn())
-  console.log(game.ascii())
-  console.log(move);
+  // console.log(game.fen())
+  // console.log(game.ascii())
 
   move = game.move(move);
   if (move === null) {
-    console.log("INVALID MOVE");
-    return false;
+    throw "INVALID MOVE ATTEMPTED";
   }
   if (!simulate) {
     // Animate the move (we'll animate back if it's an attack/non-capture)
     board.position(game.fen(),true);
   }
+
+  // console.log(">>> AFTER MAKEMOVE SIMULATED MOVE, BEFORE UNDO");
+  // console.log("Move:",move);
+  // console.log(game.pgn())
+  // console.log(game.turn())
+  // console.log(game.fen())
+  // console.log(game.ascii())
   // Undo it so it's not part of the game now (we'll replay it later as needed)
+
   game.undo();
+
+  // console.log(">>> AFTER MAKEMOVE SIMULATED MOVE, AFTER UNDO");
+  // console.log("Move:",move);
+  // console.log(game.pgn())
+  // console.log(game.turn())
+  // console.log(game.fen())
+  // console.log(game.ascii())
 
   let state = copyState(states[0]);
 
@@ -266,18 +348,9 @@ function makeMove(move,simulate) {
     if (state[target].hp > 0) {
       // Update san in last move to our notation
       move.san = move.san.replace('x','*');
-      // Then undo the capture (since it didn't "take")
-      let skipMove = {
-        from: from,
-        to: to,
-        color: move.color,
-        flags: '',
-        type: move.piece,
-        piece: move.piece,
-        pass: true,
-        san: move.san
-      }
-      game.skip(skipMove);
+      move.to = move.from;
+      let test = game.move(move);
+      // console.log("Attemped attack move, result: ",move);
 
       if (!simulate) {
         setTimeout(() => {
@@ -374,11 +447,6 @@ function makeMove(move,simulate) {
     updatePGN(move);
     // Reset the move tracking
     from = null;
-    if (game.turn() === 'b') {
-      setTimeout(() => {
-        moveBlack();
-      },config.moveSpeed * 2.1);
-    }
   }
 
   states.unshift(state);
@@ -440,7 +508,7 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
 
   for(var i = 0; i < newGameMoves.length; i++) {
 
-    console.log(`------------ROOT, DEPTH=${depth}------------`);
+    // console.log(`------------ROOT, DEPTH=${depth}------------`);
 
     makeMove(newGameMoves[i],true);
 
@@ -478,7 +546,7 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
     var bestMove = -9999;
     for (var i = 0; i < newGameMoves.length; i++) {
 
-      console.log(`------------DEPTH ${depth}------------`);
+      // console.log(`------------DEPTH ${depth}------------`);
 
       makeMove(newGameMoves[i],true);
 
@@ -499,7 +567,7 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
     var bestMove = 9999;
     for (var i = 0; i < newGameMoves.length; i++) {
 
-      console.log(`------------DEPTH ${depth}------------`);
+      // console.log(`------------DEPTH ${depth}------------`);
 
       makeMove(newGameMoves[i],true);
 
