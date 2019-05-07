@@ -210,6 +210,10 @@ function makeMove(move,simulate) {
 
   // Translate the move into a proper game move
   move = game.move(move);
+  if (!simulate) {
+    // Animate the move (we'll animate back if it's an attack/non-capture)
+    board.position(game.fen(),true);
+  }
   // Undo it so it's not part of the game
   game.undo();
 
@@ -266,31 +270,34 @@ function makeMove(move,simulate) {
       if (!simulate) {
         // Update san in last move to our notation
         move.san = move.san.replace('x','*');
-        // Reset the board, animating it back to the previous position
-        board.position(game.fen(),true);
-        // If they didn't die then we need to display attacking
-        attackSFX.play();
-        // Play the placement sound once the piece has animated back
-        setTimeout(() => {
-          placeSFX.play();
-        },config.moveSpeed);
 
-        let $message = $(`<div class="attack-message"></div>`);
-        if (damage > 0) {
-          // Display a damage indicator
-          $message.text(`-${damage}HP`);
-        }
-        else {
-          $message.text(`MISS!`);
-        }
-        let $target = $(`.square-${target}`);
-        $target.append($message);
-        $message.animate({
-          top: `-=2em`,
-          opacity: 0,
-        },1000,() => {
-          $(this).remove();
-        });
+        setTimeout(() => {
+          // Play the attack sound
+          attackSFX.play();
+          // Reset the board, animating it back to the previous position
+          board.position(game.fen(),true);
+          // Play the placement sound once the piece has animated back
+          setTimeout(() => {
+            placeSFX.play();
+          },config.moveSpeed);
+
+          let $message = $(`<div class="attack-message"></div>`);
+          if (damage > 0) {
+            // Display a damage indicator
+            $message.text(`-${damage}HP`);
+          }
+          else {
+            $message.text(`MISS!`);
+          }
+          let $target = $(`.square-${target}`);
+          $target.append($message);
+          $message.animate({
+            top: `-=2em`,
+            opacity: 0,
+          },1000,() => {
+            $(this).remove();
+          });
+        },config.moveSpeed * 1.1);
       }
     }
     else {
@@ -307,9 +314,11 @@ function makeMove(move,simulate) {
       state[to] = state[from];
       // Remove the HP information at capturing piece's previous location (there's nothing there now)
       state[from] = undefined;
-      if (simulate) {
-        // Play the capture sound
-        captureSFX.play();
+      if (!simulate) {
+        setTimeout(() => {
+          // Play the capture sound
+          captureSFX.play();
+        },config.moveSpeed * 1.1);
       }
     }
   }
@@ -360,19 +369,20 @@ function makeMove(move,simulate) {
       state[from] = undefined;
     }
     if (!simulate) {
-      // Placement sound
-      placeSFX.play();
+      setTimeout(() => {
+        // Placement sound
+        placeSFX.play();
+      },config.moveSpeed * 1.1);
     }
   }
   // Reset the move tracking
   from = null;
 
   if (!simulate) {
-    board.position(game.fen());
     if (game.turn() === 'b') {
       setTimeout(() => {
         moveBlack();
-      },config.moveSpeed * 1.1);
+      },config.moveSpeed * 2.1);
     }
 
     updatePGN(move);
