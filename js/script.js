@@ -331,6 +331,7 @@ function makeMove(move,simulate) {
           attackSFX.play();
           // Display the message
           displayDamageMessage(target,damage);
+          updateStatusBar(move.from);
           // Reset the board, animating it back to the previous position
           board.position(game.fen(),true);
           // Play the placement sound once the piece has animated back
@@ -359,6 +360,7 @@ function makeMove(move,simulate) {
         setTimeout(() => {
           // Play the capture sound
           captureSFX.play();
+          updateStatusBar(move.to);
         },config.moveSpeed * 1.1);
 
         // Check if the king was captured...
@@ -438,10 +440,12 @@ function makeMove(move,simulate) {
       state[from] = undefined;
     }
 
+
     if (!simulate) {
       setTimeout(() => {
         // Placement sound
         placeSFX.play();
+        updateStatusBar(square);
       },config.moveSpeed * 1.1);
     }
   }
