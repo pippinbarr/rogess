@@ -1719,7 +1719,7 @@ var Chess = function(fen) {
       var pretty_move = make_pretty(move_obj);
       make_move(move_obj);
 
-      console.log(move_obj);
+      // console.log(move_obj);
 
       return pretty_move;
     },

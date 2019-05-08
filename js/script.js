@@ -254,7 +254,7 @@ function moveWhite(from,to) {
 
   setTimeout(() => {
     moveBlack();
-  },config.moveSpeed * 2.1);
+  },config.moveSpeed * 5);
 
 }
 
@@ -276,12 +276,6 @@ function undo() {
 }
 
 function makeMove(move,simulate) {
-  // console.log(">>> BEFORE MAKEMOVE SIMULATED MOVE");
-  // console.log("Move:",move);
-  // console.log(game.pgn())
-  // console.log(game.turn())
-  // console.log(game.fen())
-  // console.log(game.ascii())
 
   move = game.move(move);
   if (move === null) {
@@ -291,23 +285,7 @@ function makeMove(move,simulate) {
     // Animate the move (we'll animate back if it's an attack/non-capture)
     board.position(game.fen(),true);
   }
-
-  // console.log(">>> AFTER MAKEMOVE SIMULATED MOVE, BEFORE UNDO");
-  // console.log("Move:",move);
-  // console.log(game.pgn())
-  // console.log(game.turn())
-  // console.log(game.fen())
-  // console.log(game.ascii())
-  // Undo it so it's not part of the game now (we'll replay it later as needed)
-
   game.undo();
-
-  // console.log(">>> AFTER MAKEMOVE SIMULATED MOVE, AFTER UNDO");
-  // console.log("Move:",move);
-  // console.log(game.pgn())
-  // console.log(game.turn())
-  // console.log(game.fen())
-  // console.log(game.ascii())
 
   let state = copyState(states[0]);
 
@@ -339,21 +317,19 @@ function makeMove(move,simulate) {
     else {
       damage = Math.floor(Math.random() * (state[from].hp + 1));
     }
-    // console.log(damage);
     // damage = 1000;
     let targetHP;
     move.damage = damage;
     state[target].hp -= damage;
-    // Check for death
+    // Check for attack without capture
     if (state[target].hp > 0) {
-      // Update san in last move to our notation
+      // Create a move representing "nothing" in the game
       move.san = move.san.replace('x','*');
       move.to = move.from;
-      let test = game.move(move);
-      // console.log("Attemped attack move, result: ",move);
+      game.move(move);
 
       if (!simulate) {
-        setTimeout(() => {
+        // setTimeout(() => {
           // Play the attack sound
           attackSFX.play();
           // Display the message
@@ -361,10 +337,10 @@ function makeMove(move,simulate) {
           // Reset the board, animating it back to the previous position
           board.position(game.fen(),true);
           // Play the placement sound once the piece has animated back
-          setTimeout(() => {
+          // setTimeout(() => {
             placeSFX.play();
-          },config.moveSpeed);
-        },config.moveSpeed * 1.1);
+          // },config.moveSpeed);
+        // },config.moveSpeed * 1.1);
       }
     }
     else {
@@ -450,10 +426,6 @@ function makeMove(move,simulate) {
   }
 
   states.unshift(state);
-
-  // console.log(`${game.pgn()}`);
-  // console.log(game.ascii());
-  // console.log(state);
 }
 
 function updatePGN (move) {
