@@ -30,6 +30,21 @@ body {
   font-size: 1em;
 }
 
+#game {
+  display: none;
+}
+
+#menu {
+  color: yellow;
+  font-family: CGA;
+  font-size: 2em;
+  text-align: center;
+}
+
+.option {
+  padding-top: 1em;
+}
+
 /* MOBILE? */
 @media only screen and (max-device-width: 768px) {
   body {

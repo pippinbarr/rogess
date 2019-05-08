@@ -18,6 +18,8 @@ const attackSFX = new Howl({
   src: ['assets/sounds/attack.wav']
 });
 
+let AI = false;
+
 
 let firstClick = true;
 let depth = 3;
@@ -105,80 +107,30 @@ function setup() {
 
   states.unshift(state);
 
-  // Horrible testbed for real/simulated moves that has proved nothing so far
-
-  // game.load('rnbqkb1r/1ppppppp/5n2/p3P3/8/8/PPPP1PPP/RNBQKBNR w kq - 0 1');
-  // board.position(game.fen());
-
-  let moves = [
-    // {from: 'e2', to: 'e4'},
-    // {from: 'g8', to: 'f6'},
-    // {from: 'e4', to: 'e5'},
-    // {from: 'a7', to: 'a5'},
-    // {from: 'e5', to: 'f6'},
-    // {from: 'a8', to: 'a6'}, // THIS MOVE Ra6 PLACES A PAWN ON A7??? WTF?
-    // IT ONLY HAPPEN ON THE A-FILE??? (If you mirror this on H it does happen)
-
-    // It seems to be to do with the direction of capture by a pawn...
-    // Yikes.
-    {from: 'd2', to: 'd4'},
-    {from: 'b8', to: 'c6'},
-    {from: 'd4', to: 'd5'},
-    {from: 'h7', to: 'h5'},
-    {from: 'd5', to: 'c6'},
-    {from: 'h8', to: 'h6'},
-
-    // {from: 'd5', to: 'd4'},
-    // {from: 'e5', to: 'f6'},
-    // {from: 'd4', to: 'd3'},
-    // {from: 'c2', to: 'd3'}
-  ];
-  let i = 0;
-
-  $(document).on('keydown',(e) => {
-    switch (e.key) {
-      case 'u':
-      undo();
-      // console.log(game.ascii());
-      board.position(game.fen());
-      i--;
-      break;
-
-      case 'r':
-      undo();
-      // console.log(game.ascii());
-      i--;
-      break;
-
-      case 'm':
-      makeMove(moves[i],false);
-      // console.log(">>> AFTER MAKEMOVE COMPLETE");
-      // console.log("Move:",moves[i]);
-      // console.log(game.pgn())
-      // console.log(game.turn())
-      // console.log(game.fen())
-      // console.log(game.ascii())
-      // console.log(game.ascii());
-      // console.log(game.pgn());
-      i++;
-      break;
-
-      case 's':
-      makeMove(moves[i],true);
-      // console.log(game.ascii());
-      // console.log(game.pgn());
-      i++;
-      break;
-    }
-  });
+  //setupTestbed();
 
   $('.square-55d63').on('click', squareClicked);
+
+  $('.option').on('click', function () {
+
+    if ($(this).hasClass('one-player')) {
+      AI = true;
+    }
+    else if ($(this).hasClass('two-player')) {
+      AI = false;
+    }
+
+    $('#menu').slideUp(500,() => {
+      $('#menu').hide();
+      $('#game').slideDown();
+    });
+  });
 }
 
 function squareClicked (event) {
   // Find out the notation of the square and also the element representing the piece
-  let square = $(event.currentTarget).attr('data-square');
-  let piece = $(event.currentTarget).find('.piece-417db');
+  let square = $(this).attr('data-square');
+  let piece = $(this).find('.piece-417db');
   let validPiece = (piece.length !== 0 && piece.attr('data-piece').indexOf(game.turn()) !== -1);
 
   if (validPiece) {
@@ -194,7 +146,12 @@ function squareClicked (event) {
   }
   else if (from !== null && $(event.currentTarget).hasClass('highlight1-32417')) {
     let to = $(event.currentTarget).attr('data-square');
-    moveWhite(from,to);
+    if (game.turn() === 'w') {
+      moveWhite({from: from, to: to});
+    }
+    else {
+      moveBlack({from: from, to: to});
+    }
   }
 }
 
@@ -234,13 +191,8 @@ function clearHighlights () {
   $('.square-55d63').removeClass(`highlight1-32417`);
 }
 
-function moveWhite(from,to) {
-  // Make the move in the game representation
-  let move = {
-    from: from,
-    to: to,
-    promotion: 'q' // NOTE: always promote to a queen for example simplicity
-  };
+function moveWhite(move) {
+  move.promotion = 'q';
 
   // console.log("------ REAL WHITE MOVE ------");
 
@@ -252,20 +204,29 @@ function moveWhite(from,to) {
 
   // Update the board based on the new position
 
-  setTimeout(() => {
-    moveBlack();
-  },config.moveSpeed * 5);
+  if (AI) {
+    setTimeout(() => {
+      moveBlack();
+    },config.moveSpeed * 6);
+  }
 
 }
 
-function moveBlack() {
+function moveBlack(move) {
   moveCount++;
-  let move = getBlackMove();
 
-  // console.log("------ REAL BLACK MOVE ------");
+  if (AI) {
+    move = getBlackMove();
+  }
+
+  console.log("------ REAL BLACK MOVE ------");
+  console.log(game.pgn());
+  console.log(move);
 
   makeMove(move,false);
-  // console.log('AFTER BLACK',states[0]);
+
+  // Clear all highlights from the board (a new turn is about to begin)
+  clearHighlights();
 
 }
 
@@ -277,7 +238,12 @@ function undo() {
 
 function makeMove(move,simulate) {
 
+  // console.log("Before simulate:",move);
+
   move = game.move(move);
+
+  // console.log("After simulate:",move);
+
   if (move === null) {
     throw "INVALID MOVE ATTEMPTED";
   }
@@ -366,7 +332,9 @@ function makeMove(move,simulate) {
     }
   }
   else {
-    // If we're here then the piece just moved
+    // If we're here then the piece just moved in a regular way
+    game.move(move);
+
     // We need to think about castling
     if (move.flags.indexOf('k') !== -1) {
       // Kingside
@@ -410,7 +378,6 @@ function makeMove(move,simulate) {
       state[from] = undefined;
     }
 
-    game.move(move);
     if (!simulate) {
       setTimeout(() => {
         // Placement sound
@@ -481,6 +448,8 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
   for(var i = 0; i < newGameMoves.length; i++) {
 
     // console.log(`------------ROOT, DEPTH=${depth}------------`);
+    // console.log(game.pgn());
+    // console.log(newGameMoves[i]);
 
     makeMove(newGameMoves[i],true);
 
@@ -497,6 +466,7 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
       bestMoveFound = newGameMoves[i];
     }
   }
+  console.log(evaluations)
   return bestMoveFound;
 }
 
@@ -519,6 +489,8 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
     for (var i = 0; i < newGameMoves.length; i++) {
 
       // console.log(`------------DEPTH ${depth}------------`);
+      // console.log(game.pgn());
+      // console.log(newGameMoves[i]);
 
       makeMove(newGameMoves[i],true);
 
@@ -540,6 +512,8 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
     for (var i = 0; i < newGameMoves.length; i++) {
 
       // console.log(`------------DEPTH ${depth}------------`);
+      // console.log(game.pgn());
+      // console.log(newGameMoves[i]);
 
       makeMove(newGameMoves[i],true);
 
@@ -565,6 +539,7 @@ function evaluateBoard (game,board) {
     return 1000;
   }
   else {
+    // console.log(states[0]);
     for (var i = 0; i < 8; i++) {
       for (var j = 0; j < 8; j++) {
         // totalEvaluation = totalEvaluation + getPieceValue(board[i][j], i ,j, state);
@@ -577,6 +552,8 @@ function evaluateBoard (game,board) {
 
 // function getPieceValue (piece, x, y, state) {
 function getPieceValue (piece, x, y) {
+  let square = "abcdefgh".charAt(y) + (8-x);
+  // console.log(x,y,square);
   if (piece === null) {
     return 0;
   }
@@ -587,6 +564,9 @@ function getPieceValue (piece, x, y) {
   // What is a board position that would evaluate this???
   // let hp = state["abcdefgh".charAt(x) + y];
   // absoluteValue *= hp;
+  let hp = states[0][square].hp;
+  let hpMax = hpTable[piece.type];
+  absoluteValue += hp;
   return piece.color === 'w' ? absoluteValue : -absoluteValue;
 }
 
@@ -637,6 +617,77 @@ function displayDamageMessage(target,damage) {
     top: `-=2em`,
     opacity: 0,
   },1000,() => {
-    $(this).remove();
+    $message.remove();
+  });
+}
+
+function setupTestbed() {
+
+  // Horrible testbed for real/simulated moves that has proved nothing so far
+
+  // game.load('rnbqkb1r/1ppppppp/5n2/p3P3/8/8/PPPP1PPP/RNBQKBNR w kq - 0 1');
+  // board.position(game.fen());
+
+  let moves = [
+    // {from: 'e2', to: 'e4'},
+    // {from: 'g8', to: 'f6'},
+    // {from: 'e4', to: 'e5'},
+    // {from: 'a7', to: 'a5'},
+    // {from: 'e5', to: 'f6'},
+    // {from: 'a8', to: 'a6'}, // THIS MOVE Ra6 PLACES A PAWN ON A7??? WTF?
+    // IT ONLY HAPPEN ON THE A-FILE??? (If you mirror this on H it does happen)
+
+    // It seems to be to do with the direction of capture by a pawn...
+    // Yikes.
+    {from: 'e2', to: 'e4'},
+    {from: 'a7', to: 'a6'},
+    {from: 'd1', to: 'f3'},
+    {from: 'a6', to: 'a5'},
+    {from: 'f1', to: 'c4'},
+    {from: 'a5', to: 'a4'},
+    {from: 'f3', to: 'f7'},
+
+    // {from: 'd5', to: 'd4'},
+    // {from: 'e5', to: 'f6'},
+    // {from: 'd4', to: 'd3'},
+    // {from: 'c2', to: 'd3'}
+  ];
+  let i = 0;
+
+  $(document).on('keydown',(e) => {
+    switch (e.key) {
+      case 'u':
+      undo();
+      // console.log(game.ascii());
+      board.position(game.fen());
+      i--;
+      break;
+
+      case 'r':
+      undo();
+      // console.log(game.ascii());
+      i--;
+      break;
+
+      case 'm':
+      makeMove(moves[i],false);
+      // console.log(">>> AFTER MAKEMOVE COMPLETE");
+      // console.log("Move:",moves[i]);
+      // console.log(game.pgn())
+      // console.log(game.turn())
+      // console.log(game.fen())
+      // console.log(game.ascii())
+      // console.log(game.ascii());
+      // console.log(game.pgn());
+      i++;
+      break;
+
+      case 's':
+      makeMove(moves[i],true);
+      // console.log(game.ascii());
+      // console.log(game.pgn());
+      i++;
+      break;
+    }
   });
 }

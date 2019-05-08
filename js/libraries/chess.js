@@ -660,9 +660,10 @@ var Chess = function(fen) {
     var legal_moves = [];
     for (var i = 0, len = moves.length; i < len; i++) {
       make_move(moves[i]);
-      if (!king_attacked(us)) {
+      // Don't worry about king being attacked
+      // if (!king_attacked(us)) {
         legal_moves.push(moves[i]);
-      }
+      // }
       undo_move();
     }
 
@@ -789,14 +790,17 @@ var Chess = function(fen) {
   }
 
   function in_checkmate() {
+    return false;
     return in_check() && generate_moves().length === 0;
   }
 
   function in_stalemate() {
+    return false;
     return !in_check() && generate_moves().length === 0;
   }
 
   function insufficient_material() {
+    return false;
     var pieces = {};
     var bishops = [];
     var num_pieces = 0;
@@ -844,6 +848,7 @@ var Chess = function(fen) {
   }
 
   function in_threefold_repetition() {
+    return false;
     /* TODO: while this function is fine for casual use, a better
     * implementation would use a Zobrist key (instead of FEN). the
     * Zobrist key would be maintained in the make_move/undo_move functions,
