@@ -22,7 +22,7 @@
 - ~~Fix bizarre issue of square getting renamed after attack (it was some weird shit with the damage message)~~
 - ~~__NAH?__ Turn indicator for 2P??~~
 - ~~Add 2P version (clickable black pieces, menu selection - maybe title at top then slides down on selection to reveal the board? Too smooth? Will I be able to even do it?)~~
+- ~~Add check for captured king (that's a game ender! Include # notation.)~~
+- ~~Oh! We need the tombstone! And the congratulations screen...?~~
 
-- Black makes some weird moves around not attacking/capturing the king? It's always right, right? Especially a knight which can attack without reprisal...? Maybe need to slant the AI to privilege capturing the king...
-- Add check for captured king (that's a game ender! Include # notation.)
-- Oh! We need the tombstone! And the congratulations screen...?
+- Black makes some weird moves around not attacking/capturing the king? It's always right, right? Especially a knight which can attack without reprisal...? Maybe need to slant the AI to privilege capturing the king... fuckin' siiiiighhhh

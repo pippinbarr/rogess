@@ -49,19 +49,44 @@
     <div id="game">
       <div id="pgn"></div>
       <div id="board"></div>
+      <div id="status-wrapper">
       <div id="status">
         Name:<span id="name"></span>&nbsp&nbsp
         Hits:<span id="hp"></span>(<span id="maxHP"></span>)&nbsp&nbsp
         Captures:<span id="captures"></span>
       </div>
+      <div id="resign">
+        [<span id="resign-text">Resign</span>]
+      </div>
     </div>
-    <div id="title">ROGESS</div>
-    <div id="author">by Jonathan Lessard and Pippin Barr</div>
-    <div id="menu">
-      <div class="option one-player">ONE PLAYER</div>
-      <div class="option two-player">TWO PLAYER</div>
+    </div>
+    <div id="rip-wrapper">
+      <div class="game-over-header" id="rip">
+        REST<br/>IN<br/>PEACE
+      </div>
+      <div class="game-over-header" id="congratulations">
+        CONGRATULATIONS!
+      </div>
+      <div id="rip-message">
+        <p id="rip-date">
+          08.05.2019
+        </p>
+        <p id="rip-cause">
+          White King captured by a bishop.
+        </p>
+      </div>
+      <div id="click-anywhere">
+        Click anywhere to continue.
+      </div>
     </div>
   </div>
+  <div id="title">ROGESS</div>
+  <div id="author">by <span class="author-link" id="jonathan">Jonathan Lessard</span> and <span class="author-link" id="pippin">Pippin Barr</span></div>
+  <div id="menu">
+    <div class="option one-player">ONE PLAYER</div>
+    <div class="option two-player">TWO PLAYER</div>
+  </div>
+</div>
 
 </body>
 

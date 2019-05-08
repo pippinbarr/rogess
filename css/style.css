@@ -42,6 +42,27 @@ body {
   -webkit-transform: translate3d(0,0,0)
 }
 
+#rip-wrapper {
+  margin-top: 2em;
+  display: none;
+  font-family: CGA;
+  text-align: center;
+}
+
+.game-over-header {
+  color: yellow;
+  font-size: 2em;
+}
+
+#congratulations, #rip {
+  display: none;
+}
+
+#rip-message, #click-anywhere {
+  margin-top: 2em;
+  color: grey;
+}
+
 .option {
   padding-top: 1em;
 }
@@ -100,6 +121,8 @@ body {
   color: yellow;
   text-align: center;
   margin-top: 20px;
+  -webkit-transform: translate3d(0,0,0)
+
 }
 
 #author {
@@ -110,16 +133,29 @@ body {
   margin-top: 10px;
 }
 
-#status {
+.author-link {
+  color: yellow;
+}
+
+#status-wrapper {
+  display: none;
   margin-top: 20px;
   margin-bottom: 20px;
   font-family: CGA;
   font-size: 1em;
   line-height: 1.5em;
   color: yellow;
-  text-align: left;
-  display: none;
   height: 2em;
+}
+
+#status {
+  text-align: left;
+  float: left;
+}
+
+#resign {
+  float:right;
+  text-align: right;
 }
 
 .board-b72b1 {

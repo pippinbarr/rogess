@@ -19,6 +19,9 @@ const attackSFX = new Howl({
 });
 
 let AI = false;
+const RIP_DELAY = 5000;
+
+let gameOver = false;
 
 
 let firstClick = true;
@@ -110,20 +113,13 @@ function setup() {
   //setupTestbed();
 
   $('.square-55d63').on('click', squareClicked);
-
-  $('.option').on('click', function () {
-
-    if ($(this).hasClass('one-player')) {
-      AI = true;
-    }
-    else if ($(this).hasClass('two-player')) {
-      AI = false;
-    }
-
-    $('#menu').slideUp(500,() => {
-      $('#menu').hide();
-      $('#game').slideDown();
-    });
+  $('.option').on('click', menuClicked);
+  $('#resign').on('click',resignClicked);
+  $('#jonathan').on('click',() => {
+    window.open('https://jonathanlessard.net/','_blank');
+  });
+  $('#pippin').on('click',() => {
+    window.open('https://www.pippinbarr.com/','_blank');
   });
 }
 
@@ -135,7 +131,7 @@ function squareClicked (event) {
 
   if (validPiece) {
     if (firstClick) {
-      $('#status').show();
+      $('#status-wrapper').show();
       $('#title').hide();
       $('#author').hide();
       firstClick = false;
@@ -153,6 +149,37 @@ function squareClicked (event) {
       moveBlack({from: from, to: to});
     }
   }
+}
+
+function menuClicked () {
+
+  if ($(this).hasClass('one-player')) {
+    AI = true;
+  }
+  else if ($(this).hasClass('two-player')) {
+    AI = false;
+  }
+
+  $('#menu').slideUp(500,() => {
+    $('#menu').hide();
+    $('#game').slideDown();
+  });
+}
+
+function resignClicked () {
+  let text = $('#resign-text').text();
+  if (text === 'Resign') {
+    $('#resign-text').text('Confirm?')
+  }
+  else if (text === 'Confirm?') {
+    // Kill the game
+    resetToMenu();
+  }
+}
+
+function resetToMenu () {
+  $(document).off('click');
+  document.location.reload();
 }
 
 function updateStatusBar(square) {
@@ -192,6 +219,8 @@ function clearHighlights () {
 }
 
 function moveWhite(move) {
+  if (gameOver) return;
+
   move.promotion = 'q';
 
   // console.log("------ REAL WHITE MOVE ------");
@@ -213,15 +242,17 @@ function moveWhite(move) {
 }
 
 function moveBlack(move) {
+  if (gameOver) return;
+
   moveCount++;
 
   if (AI) {
     move = getBlackMove();
   }
 
-  console.log("------ REAL BLACK MOVE ------");
-  console.log(game.pgn());
-  console.log(move);
+  // console.log("------ REAL BLACK MOVE ------");
+  // console.log(game.pgn());
+  // console.log(move);
 
   makeMove(move,false);
 
@@ -323,12 +354,41 @@ function makeMove(move,simulate) {
       state[to] = state[from];
       // Remove the HP information at capturing piece's previous location (there's nothing there now)
       state[from] = undefined;
+
       if (!simulate) {
         setTimeout(() => {
           // Play the capture sound
           captureSFX.play();
         },config.moveSpeed * 1.1);
+
+        // Check if the king was captured...
+        if (move.captured === 'k') {
+          gameOver = true;
+          setTimeout(() => {
+            $('#game').hide();
+            $('#status-wrapper').hide();
+            $('#rip-wrapper').show();
+
+            let date = new Date();
+            $('#rip-date').text(date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear());
+            let kingColor = move.color === 'w' ? 'Black' : 'White';
+            if (AI && kingColor === 'Black') {
+              $('#congratulations').show();
+            }
+            else {
+              $('#rip').show();
+            }
+            let capturer = pieceNames[move.piece];
+            $('#rip-cause').text(`${kingColor} king captured by a ${capturer}.`);
+
+            $(document).on('click',resetToMenu);
+            $('.square-55d63').off('click');
+            $('#resign').off('click');
+          },RIP_DELAY);
+        }
       }
+
+
     }
   }
   else {
@@ -466,7 +526,7 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
       bestMoveFound = newGameMoves[i];
     }
   }
-  console.log(evaluations)
+  // console.log(evaluations)
   return bestMoveFound;
 }
 
