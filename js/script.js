@@ -329,7 +329,7 @@ function makeMove(move,simulate) {
       game.move(move);
 
       if (!simulate) {
-        // setTimeout(() => {
+        setTimeout(() => {
           // Play the attack sound
           attackSFX.play();
           // Display the message
@@ -337,10 +337,10 @@ function makeMove(move,simulate) {
           // Reset the board, animating it back to the previous position
           board.position(game.fen(),true);
           // Play the placement sound once the piece has animated back
-          // setTimeout(() => {
+          setTimeout(() => {
             placeSFX.play();
-          // },config.moveSpeed);
-        // },config.moveSpeed * 1.1);
+          },config.moveSpeed);
+        },config.moveSpeed * 1.1);
       }
     }
     else {
