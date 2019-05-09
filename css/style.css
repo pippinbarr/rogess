@@ -153,6 +153,10 @@ body {
   float: left;
 }
 
+#turnbar {
+  display: none;
+}
+
 #resign {
   float:right;
   text-align: right;

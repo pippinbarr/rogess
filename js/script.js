@@ -20,6 +20,9 @@ const attackSFX = new Howl({
 
 let AI = false;
 const RIP_DELAY = 5000;
+const TURN_BAR_DELAY = 500;
+let turnbarTimeout;
+let thinkingInterval;
 
 let gameOver = false;
 
@@ -183,6 +186,7 @@ function resetToMenu () {
 }
 
 function updateStatusBar(square) {
+  $('#turnbar').hide();
   let state = states[0];
   let piece = state[square];
   $('#name').text(`${pieceNames[piece.type]}`);
@@ -190,6 +194,23 @@ function updateStatusBar(square) {
   $('#hp').text(`${piece.hp}`);
   $('#maxHP').text(`${piece.maxHP}`);
   $('#captures').text(`${piece.captures}`);
+  $('#statusbar').show();
+}
+
+function setTurnBar(color) {
+  console.log("Kill thinking")
+  if (thinkingInterval !== null) clearInterval(thinkingInterval);
+
+  $('#status').show();
+  $('#statusbar').hide();
+  let turn = color === 'w' ? 'White' : 'Black';
+  if (AI && turn === 'Black') {
+    $('#turnbar').html('Black is thinking...');
+  }
+  else {
+    $('#turnbar').text(`${turn} to play.`);
+  }
+  $('#turnbar').show();
 }
 
 function highlightMoves (square) {
@@ -225,7 +246,13 @@ function moveWhite(move) {
 
   // console.log("------ REAL WHITE MOVE ------");
 
+  $('#status').hide();
   makeMove(move,false);
+  turnbarTimeout = setTimeout(() => {
+    setTurnBar(game.turn());
+    turnbarTimeout = null;
+  },500);
+
   // console.log('AFTER WHITE',states[0]);
 
   // Clear all highlights from the board (a new turn is about to begin)
@@ -248,17 +275,34 @@ function moveBlack(move) {
 
   if (AI) {
     move = getBlackMove();
+    makeDelayedMove(move);
   }
+  else {
+    $('#status').hide();
+    makeMove(move,false);
+    turnbarTimeout = setTimeout(() => {
+      setTurnBar(game.turn());
+      turnbarTimeout = null;
+    },500);
+    // Clear all highlights from the board (a new turn is about to begin)
+    clearHighlights();
+  }
+}
 
-  // console.log("------ REAL BLACK MOVE ------");
-  // console.log(game.pgn());
-  // console.log(move);
-
-  makeMove(move,false);
-
-  // Clear all highlights from the board (a new turn is about to begin)
-  clearHighlights();
-
+function makeDelayedMove(move) {
+  if (turnbarTimeout) {
+    setTimeout(() => {
+      makeDelayedMove(move);
+    },1000);
+  }
+  else {
+    $('#status').hide();
+    makeMove(move,false);
+    turnbarTimeout = setTimeout(() => {
+      setTurnBar(game.turn());
+      turnbarTimeout = null;
+    },500);
+  }
 }
 
 function undo() {
@@ -445,8 +489,17 @@ function makeMove(move,simulate) {
       setTimeout(() => {
         // Placement sound
         placeSFX.play();
-        updateStatusBar(square);
+        if (move.color === 'w' || !AI) {
+          updateStatusBar(move.to);
+        }
       },config.moveSpeed * 1.1);
+    }
+
+    if (!simulate) {
+      let delay = TURN_BAR_DELAY;
+      if (AI && move.color === 'b') {
+        delay = 500;
+      }
     }
   }
 
