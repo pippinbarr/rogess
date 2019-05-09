@@ -29,3 +29,5 @@
 - ~~__WELL I DID SOMETHING...?__ Black makes some weird moves around not attacking/capturing the king? It's always right, right? Especially a knight which can attack without reprisal...? Maybe need to slant the AI to privilege capturing the king... fuckin' siiiiighhhh~~
 
 - Testing.
+- Fix messages for 2P
+- Reset confirm? back to resign at a certain point
