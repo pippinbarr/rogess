@@ -27,7 +27,9 @@
 - ~~Update the status line more immediately on events~~
 - ~~Status bar should change between turns, if no piece is selected (which there shouldn't be) it should be blank? "White to play"~~
 - ~~__WELL I DID SOMETHING...?__ Black makes some weird moves around not attacking/capturing the king? It's always right, right? Especially a knight which can attack without reprisal...? Maybe need to slant the AI to privilege capturing the king... fuckin' siiiiighhhh~~
+- ~~Fix messages for 2P~~
+- ~~Fix status bar display stuff~~
+- ~~Reset confirm? back to resign at a certain point~~
+- ~~2P resignations~~
 
 - Testing.
-- Fix messages for 2P
-- Reset confirm? back to resign at a certain point

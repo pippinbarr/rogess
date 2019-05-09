@@ -134,6 +134,10 @@ function squareClicked (event) {
   let validPiece = (piece.length !== 0 && piece.attr('data-piece').indexOf(game.turn()) !== -1);
 
   if (validPiece) {
+    if (turnbarTimeout) {
+      clearTimeout(turnbarTimeout);
+      turnbarTimeout = null;
+    }
     if (firstClick) {
       $('#status-wrapper').show();
       $('#title').hide();
@@ -173,11 +177,14 @@ function menuClicked () {
 function resignClicked () {
   let text = $('#resign-text').text();
   if (text === 'Resign') {
-    $('#resign-text').text('Confirm?')
+    $('#resign-text').text('Confirm?');
+    setTimeout(() => {
+      $('#resign-text').text('Resign');
+    },2000);
   }
   else if (text === 'Confirm?') {
     // Kill the game
-    resetToMenu();
+    showGameOver(undefined,true);
   }
 }
 
@@ -199,7 +206,6 @@ function updateStatusBar(square) {
 }
 
 function setTurnBar(color) {
-  // console.log("Kill thinking")
   if (thinkingInterval !== null) clearInterval(thinkingInterval);
 
   $('#status').show();
@@ -247,8 +253,12 @@ function moveWhite(move) {
 
   // console.log("------ REAL WHITE MOVE ------");
 
-  $('#status').hide();
+  $('#statusbar').hide();
   makeMove(move,false);
+
+  if (gameOver) return;
+  clearHighlights();
+
   turnbarTimeout = setTimeout(() => {
     setTurnBar(game.turn());
     turnbarTimeout = null;
@@ -257,7 +267,6 @@ function moveWhite(move) {
   // console.log('AFTER WHITE',states[0]);
 
   // Clear all highlights from the board (a new turn is about to begin)
-  clearHighlights();
 
   // Update the board based on the new position
 
@@ -279,14 +288,16 @@ function moveBlack(move) {
     makeDelayedMove(move);
   }
   else {
-    $('#status').hide();
+    $('#statusbar').hide();
     makeMove(move,false);
+    clearHighlights();
+
+    if (gameOver) return;
+
     turnbarTimeout = setTimeout(() => {
       setTurnBar(game.turn());
       turnbarTimeout = null;
     },500);
-    // Clear all highlights from the board (a new turn is about to begin)
-    clearHighlights();
   }
 }
 
@@ -297,8 +308,10 @@ function makeDelayedMove(move) {
     },1000);
   }
   else {
-    $('#status').hide();
+    $('#statusbar').hide();
     makeMove(move,false);
+    if (gameOver) return;
+
     turnbarTimeout = setTimeout(() => {
       setTurnBar(game.turn());
       turnbarTimeout = null;
@@ -376,7 +389,7 @@ function makeMove(move,simulate) {
           attackSFX.play();
           // Display the message
           displayDamageMessage(target,damage);
-          updateStatusBar(move.from);
+          // updateStatusBar(move.from);
           // Reset the board, animating it back to the previous position
           board.position(game.fen(),true);
           // Play the placement sound once the piece has animated back
@@ -405,32 +418,16 @@ function makeMove(move,simulate) {
         setTimeout(() => {
           // Play the capture sound
           captureSFX.play();
-          updateStatusBar(move.to);
+          // updateStatusBar(move.to);
         },config.moveSpeed * 1.1);
 
         // Check if the king was captured...
         if (move.captured === 'k') {
           gameOver = true;
+          clearHighlights();
+          $('#status').hide();
           setTimeout(() => {
-            $('#game').hide();
-            $('#status-wrapper').hide();
-            $('#rip-wrapper').show();
-
-            let date = new Date();
-            $('#rip-date').text(date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear());
-            let kingColor = move.color === 'w' ? 'Black' : 'White';
-            if (AI && kingColor === 'Black') {
-              $('#congratulations').show();
-            }
-            else {
-              $('#rip').show();
-            }
-            let capturer = pieceNames[move.piece];
-            $('#rip-cause').text(`${kingColor} king captured by a ${capturer}.`);
-
-            $(document).on('click',resetToMenu);
-            $('.square-55d63').off('click');
-            $('#resign').off('click');
+            showGameOver(move,false);
           },RIP_DELAY);
         }
       }
@@ -491,7 +488,7 @@ function makeMove(move,simulate) {
         // Placement sound
         placeSFX.play();
         if (move.color === 'w' || !AI) {
-          updateStatusBar(move.to);
+          // updateStatusBar(move.to);
         }
       },config.moveSpeed * 1.1);
     }
@@ -513,13 +510,57 @@ function makeMove(move,simulate) {
   states.unshift(state);
 }
 
+function showGameOver(move,resignation) {
+  $('#game').hide();
+  $('#status-wrapper').hide();
+  $('#rip-wrapper').show();
+
+  let date = new Date();
+  $('#rip-date').text(date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear());
+
+  if (resignation) {
+    $('#rip').show();
+    if (AI) {
+      $('#rip-cause').text(`${(game.turn() === 'w') ? 'You' : 'Black'} resigned.`);
+    }
+    else {
+      $('#rip-cause').text(`${(game.turn() === 'w') ? 'White' : 'Black'} resigned.`);
+    }
+  }
+  else {
+    let kingColor = move.color === 'w' ? 'black' : 'white';
+    if (AI && kingColor === 'Black' && !resignation) {
+      $('#congratulations').show();
+    }
+    else {
+      $('#rip').show();
+    }
+
+    let capturer = pieceNames[move.piece].toLowerCase();
+    $('#rip-cause').text(`The ${kingColor} king was captured by a ${capturer}.`);
+  }
+
+  setTimeout(() => { $(document).on('click',resetToMenu) },500);
+  $('.square-55d63').off('click');
+  $('#resign').off('click');
+
+}
+
 function updatePGN (move) {
   let san = move.san;
 
   let note = '';
 
-  let active = (move.color === 'w') ? 'Your' : 'The black';
-  let passive = (move.color === 'w') ? 'The black' : 'Your';
+  let active, passive;
+
+  if (AI) {
+    active = (move.color === 'w') ? 'Your' : 'The black';
+    passive = (move.color === 'w') ? 'The black' : 'Your';
+  }
+  else {
+    active = (move.color === 'w') ? 'The white' : 'The black';
+    passive = (move.color === 'w') ? 'The black' : 'The white';
+  }
 
   // Deal with capture messages
   if (san.indexOf('x') !== -1) {
