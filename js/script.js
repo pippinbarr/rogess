@@ -21,6 +21,7 @@ const attackSFX = new Howl({
 let AI = false;
 const RIP_DELAY = 5000;
 const TURN_BAR_DELAY = 500;
+const CHECK_VALUE = 100;
 let turnbarTimeout;
 let thinkingInterval;
 
@@ -198,7 +199,7 @@ function updateStatusBar(square) {
 }
 
 function setTurnBar(color) {
-  console.log("Kill thinking")
+  // console.log("Kill thinking")
   if (thinkingInterval !== null) clearInterval(thinkingInterval);
 
   $('#status').show();
@@ -572,7 +573,7 @@ function minimaxRoot (depth, game, isMaximisingPlayer) {
 
     var value = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
     if (game.in_check()) {
-      value += 5;
+      value += CHECK_VALUE;
     }
     evaluations.push({move: newGameMoves[i], evaluation: value});
 
@@ -614,6 +615,9 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
       // let newstate = newstateFromMove(game,newGameMoves[i],state);
       // let minimaxed = minimax(depth - 1, game, newstate, alpha, beta, !isMaximisingPlayer);
       let minimaxed = minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer);
+      if (game.in_check()) {
+        minimaxed += CHECK_VALUE;
+      }
       bestMove = Math.max(bestMove, minimaxed);
 
       undo();
@@ -635,6 +639,9 @@ function minimax (depth, game, alpha, beta, isMaximisingPlayer) {
       makeMove(newGameMoves[i],true);
 
       let minimaxed = minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer);
+      if (game.in_check()) {
+        minimaxed -= CHECK_VALUE;
+      }
       bestMove = Math.min(bestMove, minimaxed);
 
       undo();

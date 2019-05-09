@@ -26,5 +26,6 @@
 - ~~Oh! We need the tombstone! And the congratulations screen...?~~
 - ~~Update the status line more immediately on events~~
 - ~~Status bar should change between turns, if no piece is selected (which there shouldn't be) it should be blank? "White to play"~~
+- ~~__WELL I DID SOMETHING...?__ Black makes some weird moves around not attacking/capturing the king? It's always right, right? Especially a knight which can attack without reprisal...? Maybe need to slant the AI to privilege capturing the king... fuckin' siiiiighhhh~~
 
-- Black makes some weird moves around not attacking/capturing the king? It's always right, right? Especially a knight which can attack without reprisal...? Maybe need to slant the AI to privilege capturing the king... fuckin' siiiiighhhh
+- Testing.
