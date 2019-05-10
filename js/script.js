@@ -529,7 +529,7 @@ function showGameOver(move,resignation) {
   }
   else {
     let kingColor = move.color === 'w' ? 'black' : 'white';
-    if (AI && kingColor === 'Black' && !resignation) {
+    if (AI && kingColor === 'black' && !resignation) {
       $('#congratulations').show();
     }
     else {
@@ -717,7 +717,6 @@ function evaluateBoard (game,board) {
 
 // function getPieceValue (piece, x, y, state) {
 function getPieceValue (piece, x, y) {
-  let square = "abcdefgh".charAt(y) + (8-x);
   // console.log(x,y,square);
   if (piece === null) {
     return 0;
@@ -729,25 +728,27 @@ function getPieceValue (piece, x, y) {
   // What is a board position that would evaluate this???
   // let hp = state["abcdefgh".charAt(x) + y];
   // absoluteValue *= hp;
-  let hp = states[0][square].hp;
-  let hpMax = hpTable[piece.type];
-  absoluteValue += hp;
   return piece.color === 'w' ? absoluteValue : -absoluteValue;
 }
 
 function getAbsoluteValue (piece, isWhite, x ,y) {
+  let square = "abcdefgh".charAt(y) + (8-x);
+  let hp = states[0][square].hp;
+  let hpMax = hpTable[piece.type];
+  let multiplier = hp;
+
   if (piece.type === 'p') {
-    return 10 + ( isWhite ? pawnEvalWhite[y][x] : pawnEvalBlack[y][x] );
+    return multiplier * 10 + ( isWhite ? pawnEvalWhite[y][x] : pawnEvalBlack[y][x] );
   } else if (piece.type === 'r') {
-    return 50 + ( isWhite ? rookEvalWhite[y][x] : rookEvalBlack[y][x] );
+    return multiplier * 50 + ( isWhite ? rookEvalWhite[y][x] : rookEvalBlack[y][x] );
   } else if (piece.type === 'n') {
-    return 30 + knightEval[y][x];
+    return multiplier * 30 + knightEval[y][x];
   } else if (piece.type === 'b') {
-    return 30 + ( isWhite ? bishopEvalWhite[y][x] : bishopEvalBlack[y][x] );
+    return multiplier * 30 + ( isWhite ? bishopEvalWhite[y][x] : bishopEvalBlack[y][x] );
   } else if (piece.type === 'q') {
-    return 90 + evalQueen[y][x];
+    return multiplier * 90 + evalQueen[y][x];
   } else if (piece.type === 'k') {
-    return 900 + ( isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x] );
+    return multiplier * 900 + ( isWhite ? kingEvalWhite[y][x] : kingEvalBlack[y][x] );
   }
   throw "Unknown piece type: " + piece.type;
 }
