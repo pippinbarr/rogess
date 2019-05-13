@@ -18,7 +18,7 @@ Jonathan and Pippin are experimental game developers who have made games about e
 
 ## Description
 
-_Rogess_ is the shadow-sequel to [_Chogue_](https://github.com/pippinbarr/chogue/). Where _Chogue_ set the game of chess in a series of _Rogue_-like procedurally-generated dungeons, _Rogess_ takes the combat rules of _Rogue_ and applies them to a standard game of chess. Essentially, _Rogess_ answers a fairly simple "what if?" around the mechanics of chess and the spatial environment of _Rogue_. As with _Chogue_, this reconfiguration of bothh games leads to something new and odd and maybe, just maybe, kind of enjoyable.
+_Rogess_ is the shadow-sequel to [_Chogue_](https://github.com/pippinbarr/chogue/). Where _Chogue_ set the game of chess in a series of _Rogue_-like procedurally-generated dungeons, _Rogess_ takes the combat rules of _Rogue_ and applies them to a standard game of chess. Essentially, _Rogess_ answers a fairly simple "what if?" around the mechanics of chess and the spatial environment of _Rogue_. As with _Chogue_, this reconfiguration of both games leads to something new and odd and maybe, just maybe, kind of enjoyable.
 
 ## History
 

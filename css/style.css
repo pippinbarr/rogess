@@ -64,7 +64,9 @@ body {
 }
 
 .option {
-  padding-top: 1em;
+  /* padding-top: 1em; */
+  cursor: pointer;
+  display: inline-block;
 }
 
 /* MOBILE? */
@@ -135,6 +137,7 @@ body {
 
 .author-link {
   color: yellow;
+  cursor: pointer;
 }
 
 #status-wrapper {
@@ -160,6 +163,7 @@ body {
 #resign {
   float:right;
   text-align: right;
+  cursor: pointer;
 }
 
 .board-b72b1 {

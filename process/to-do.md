@@ -1,4 +1,4 @@
-- ~~Make the board work~~
+  - ~~Make the board work~~
 - ~~Make the AI work~~
 - ~~Add HP to pieces~~
 - ~~Account for castling and en passant~~
@@ -31,5 +31,6 @@
 - ~~Fix status bar display stuff~~
 - ~~Reset confirm? back to resign at a certain point~~
 - ~~2P resignations~~
+- ~~Testing.~~
 
-- Testing.
+- Cursor on hover of valid link/piece
