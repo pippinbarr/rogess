@@ -32,5 +32,13 @@
 - ~~Reset confirm? back to resign at a certain point~~
 - ~~2P resignations~~
 - ~~Testing.~~
+- ~~__NOT FOR PIECES BECAUSE THEY'RE JUST THE MAIN INTERFACE ANYWAY__ Cursor on hover of valid link/piece~~
 
-- Cursor on hover of valid link/piece
+## Release
+
+- ~~Press kit~~
+- Email to press
+- Newsletter
+- Post to aggregators
+- itch.io
+- Kongregate etc.?
