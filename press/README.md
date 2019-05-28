@@ -52,7 +52,8 @@ _Rogess_ is an open source game licensed under a [Creative Commons Attribution-N
 
 ## Press
 
-- Coming soon?
+- Cory Doctorow. [Rogess: chess with roguelike combat](https://boingboing.net/2019/05/21/chess-dungeon-crawl.html). Boing Boing. 21 May 2019.
+- Lisandro Pardo. [Rogess: Juego de rol y ajedrez en uno solo](https://www.neoteo.com/juego-de-rol-y-ajedrez-rogess/). Neoteo. 22 May 2019.
 
 ## Additional Links
 
