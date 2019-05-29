@@ -1,6 +1,6 @@
 # [Chogue]
 
-## Pippin Barr <pippin.barr@gmail.com>	Sat, Jun 23, 2018 at 5:13 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Sat, Jun 23, 2018 at 5:13 PM To: Jonathan Lessard
 
 [...]
 
@@ -8,7 +8,7 @@
 
 
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Sat, Jun 23, 2018 at 10:29 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Sat, Jun 23, 2018 at 10:29 PM To: Pippin Barr
 
 [...]
 
@@ -22,7 +22,7 @@ best,
 
 Jo
 
-## Pippin Barr <pippin.barr@gmail.com>	Sun, Jun 24, 2018 at 9:34 AM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Sun, Jun 24, 2018 at 9:34 AM To: Jonathan Lessard
 
 [...]
 
@@ -34,14 +34,14 @@ Cherry: yeah it's a good question as to whether we ought to do more. I think my 
 
 # Cherry Chogue...
 
-##Pippin Barr <pippin.barr@gmail.com>	Thu, Aug 16, 2018 at 4:43 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Thu, Aug 16, 2018 at 4:43 PM To: Jonathan Lessard
 Does feel easy... hmmm. I mean, I didn't beat it, but it really felt like I would do so inevitably...
 
 ---
 
 # Cherry Chogue branch
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, Aug 17, 2018 at 2:25 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, Aug 17, 2018 at 2:25 PM To: Pippin Barr
 Hey,
 
 Went out and tried a few things in the new CherryChogue branch:
@@ -62,7 +62,7 @@ best,
 
 Jo
 
-## Pippin Barr <pippin.barr@gmail.com>	Sun, Aug 19, 2018 at 5:13 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Sun, Aug 19, 2018 at 5:13 PM To: Jonathan Lessard
 New colours are pleasing.
 
 HP thing works really well as an initial approach to balance.
@@ -83,7 +83,7 @@ I guess the other route is to return to think about the original Cherry with the
 
 Hmmm.
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Sun, Aug 19, 2018 at 8:44 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Sun, Aug 19, 2018 at 8:44 PM To: Pippin Barr
 
 We could do like Rogue and tie leveling up to beating enemies with XP instead of the pickable powerups. This would incencitize battle when you reach later levels and feel too weak. This requires leveling up of monsters though...
 
@@ -100,14 +100,14 @@ Yeah... frustrating that it's not as easy as planned to do Cherry!
 jo
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Mon, Aug 20, 2018 at 9:23 AM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Mon, Aug 20, 2018 at 9:23 AM To: Jonathan Lessard
 Hmmm, levelling up monsters. The more powerful queen. I guess we could try indicating something like that by changing the colour of the pieces? The piece type "only" indicates the way it moves, while the colour helps us realise it's a different kind of thing? I like the idea of a "Kestral Queen" or similar... I'm sure there's a big-ass list of monsters from Rogue we can look at to figure this out... I think that could be the way to go right?
 
 Then we just need some official "level up!" thing that increases your max HP with a message, and then keep the gold pieces as HP potions... I think this is well worth implementing as it "should" work given that Rogue does?
 
 This is frustrating, it's true, but also it's so "design" right? Great in terms of being honest about the core values of the project and trying to design within them...
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Mon, Aug 20, 2018 at 8:39 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Mon, Aug 20, 2018 at 8:39 PM To: Pippin Barr
 answers in text...
 
 > Hmmm, levelling up monsters. The more powerful queen. I guess we could try indicating something like that by changing the colour of the pieces? The piece type "only" indicates the way it moves, while the colour helps us realise it's a different kind of thing? I like the idea of a "Kestral Queen" or similar... I'm sure there's a big-ass list of monsters from Rogue we can look at to figure this out... I think that could be the way to go right?
@@ -137,7 +137,7 @@ However if we use the actual numbers, I suppose they all kinda balance with the 
 
 Indeed, making two very different variants is actually good proof of our general approach.
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Mon, Aug 20, 2018 at 9:10 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Mon, Aug 20, 2018 at 9:10 PM To: Pippin Barr
 Ok, actually I found the levels table (and also I didn't read the status line well, which is actually: CurrentLevel / Current XP) (does anyone really reach 8M XP?!)
 
 ```
@@ -164,7 +164,7 @@ int e_levels[] = {
    8000000L,
 ```
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Mon, Aug 20, 2018 at 9:15 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Mon, Aug 20, 2018 at 9:15 PM To: Pippin Barr
 while we're at it, here's the random pick of monster that is dependent on current level:
 
 ```
@@ -183,7 +183,7 @@ static char lvl_mons[] =  {
     return mons[d];
 ```
 
-## Pippin Barr <pippin.barr@gmail.com>	Wed, Aug 22, 2018 at 11:05 AM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Wed, Aug 22, 2018 at 11:05 AM To: Jonathan Lessard
 Nice research work there! Very reassuring to have the real numbers. To some extent we can defend the authenticity angle even if the gameplay isn't great, so long as it isn't boring?
 
 Agree on potions.
@@ -194,7 +194,7 @@ I guess attaching a monster-letter to each piece works... it starts almost feeli
 
 Hmm ok. So what's the next step? Does this sound like a lot of dev?
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Sun, Aug 26, 2018 at 4:35 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Sun, Aug 26, 2018 at 4:35 PM To: Pippin Barr
 Some work but not too much i think.
 
 As you get swamped with the semester and I'm in over my head with parenting, I suppose the first of us who finds the time and motivation to get to it notifies the other!
@@ -204,7 +204,7 @@ best,
 jo
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Mon, Aug 27, 2018 at 8:25 AM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Mon, Aug 27, 2018 at 8:25 AM To: Jonathan Lessard
 Sounds good. It might suit my semester to some extent as I often struggle with new design work but can do implementation...
 
 ---
@@ -215,7 +215,7 @@ __Life ensued until we eventually met for coffee to establish a new orientation 
 
 # ROGESS
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, Mar 22, 2019 at 2:30 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, Mar 22, 2019 at 2:30 PM To: Pippin Barr
 
 Hey,
 
@@ -230,7 +230,7 @@ Is that trajectory between surprise at the hitpoint attacks and adapting the che
 Jo
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, Mar 22, 2019 at 3:19 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Fri, Mar 22, 2019 at 3:19 PM To: Jonathan Lessard
 Hah! Played ROGESS some. Yeah the fool's mate basically works here. I think it's pretty disappointing though. There's some satisfaction to playing proper chess, but the computer AI is so dumb it really makes no effort to protect its king and the results and kind of bad?
 
 Question: we currently value the king at 1HP, but there's no reason it couldn't be at 10HP say, as the most important piece? This would give it a chance to get away from attacks?
@@ -241,7 +241,7 @@ The thing is, when I played regular chess against it, it was genuinely interesti
 
 Also we'd need castling...
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, Mar 22, 2019 at 3:26 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, Mar 22, 2019 at 3:26 PM To: Pippin Barr
 yup yup...
 
 I was thinking of boosting the black king as well... that would make a huge difference, you would neet to mount a proper attack. Could be the costliest thing to try. Select the black king's piece script and set it to... 10? 20? Mighty King of Yendor. Perhaps we should visually show he's special though.
@@ -250,12 +250,12 @@ I agree this might be fun to try against an actual opponent... not sure if we co
 
 Jo
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, Mar 22, 2019 at 3:34 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, Mar 22, 2019 at 3:34 PM To: Pippin Barr
 oh! 10 HP black king is already a very different game... not sure how to play it!
 
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Sat, Mar 23, 2019 at 4:16 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Sat, Mar 23, 2019 at 4:16 PM To: Jonathan Lessard
 
 Yeah much more interesting! I won a couple of games just now, but I think with a slightly more sophisticated AI it would have been significantly harder... thoughts on that:
 
@@ -271,7 +271,7 @@ Starting to get kind of hardcore though? Starting to wonder if we can just "obta
 
 # Chess AI
 
-## Pippin Barr <pippin.barr@gmail.com>	Sat, Mar 23, 2019 at 4:22 PM To: Jonathan Lessard <unkelben@gmail.com>
+## Pippin Barr	Sat, Mar 23, 2019 at 4:22 PM To: Jonathan Lessard
 Nice "simple" AI
 https://medium.freecodecamp.org/simple-chess-ai-step-by-step-1d55a9266977
 
@@ -280,7 +280,7 @@ https://www.chessprogramming.org/Getting_Started
 
 Looks interesting. Not sure how well this would interface with our current representation of the board though, and it's pretty specific to an 8x8 board (which is okay for ROGESS at least).
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Tue, Mar 26, 2019 at 12:39 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Tue, Mar 26, 2019 at 12:39 PM To: Pippin Barr
 Good article, the first one. Good general framework for a discrete game AI. Our problem with Chogue is the physics-based interaction between pieces. The AI could only know about the value of future positions by actually moving the pieces and registering collisions to see if a piece captured another piece... which would be both absurdly slow and ridiculous. A hack would be to maintain a parallel "traditional" representation of the board and pieces for the purpose of AI, while keeping what we have to manage interactions.
 
 It would be simpler to add in a few more heuristics for the AI, as you were suggesting like not eating a covered piece if the exchange is not as good... Not sure it would be enough.
@@ -289,14 +289,14 @@ An alternative approach (just thinking) could be to dramatically change the odds
 
 Jo
 
-## Pippin Barr <pippin.barr@gmail.com>	Tue, Mar 26, 2019 at 5:15 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Tue, Mar 26, 2019 at 5:15 PM To: Jonathan Lessard
 Yeah I guess the extra rules for the AI is going to be the least damaging to the integrity of the overall game - does seem rather a lot to write a completely separate chess representation in C# just to implement AI.
 
 The level-up version could work, though then I guess we're roaming pretty far from the idea of the inversion of Chogue being chess with Rogue attacks? It's tantalisingly close to working, I think, with a stronger AI. It's possible I could take a look at this in the Summer (or even implement the behind-the-scenes AI to drive the opponent. though it makes me shudder a bit :)
 
 Pippin
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Wed, Mar 27, 2019 at 4:05 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Wed, Mar 27, 2019 at 4:05 PM To: Pippin Barr
 I think it's worth trying ramping up the AI and see if it's enough. It could also benefit original chogue and possible Mobile Chogue.
 
 So...
@@ -305,17 +305,17 @@ So...
 1. Do not uncover a piece (unless you eat a better piece?)
 1. In the event of no interesting move, priorize advancing higher-level pieces than pawns?
 
-## Pippin Barr <pippin.barr@gmail.com>	Thu, Mar 28, 2019 at 8:23 AM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Thu, Mar 28, 2019 at 8:23 AM To: Jonathan Lessard
 Hmm yeah I think those are pretty strong. I think the concept of being “protected” would be nice too? So fundamental to chess that you don’t worry about a threatened piece if it’s defended (unless it’s attacked by a lower value piece). Seems like the current system should be able to build a list of attacks and defences for each piece and work from that? And maintaining it shouldn’t be too awful?
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, Mar 29, 2019 at 12:20 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, Mar 29, 2019 at 12:20 PM To: Pippin Barr
 yep, that's good.
 
 ---
 
 # ROGESS AI
 
-## Jonathan Lessard <unkelben@gmail.com>	Thu, Apr 4, 2019 at 2:40 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Thu, Apr 4, 2019 at 2:40 PM To: Pippin Barr
 Hey!
 
 ROGESS AI is updated... theoretically:
@@ -331,7 +331,7 @@ Jo
 
 # rogess message line
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Thu, Apr 4, 2019 at 2:10 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Thu, Apr 4, 2019 at 2:10 PM To: Pippin Barr
 Hi,
 
 I brought back the status and message lines in Rogess. It would be sad to miss the excellent "swing and miss" messages, as for the status, it's nice to see the HP of your piece.
@@ -342,12 +342,12 @@ best,
 
 Jo
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, Apr 5, 2019 at 9:53 AM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Fri, Apr 5, 2019 at 9:53 AM To: Jonathan Lessard
 Pulled and played. Definitely  better as you say! (Though definitely still see the AI make some poor decisions like ignoring a threat to its king in order to capture somewhere else, and a couple of poor trades.) It now feels like you actually have to pay attention to play, even if it is a bit of an idiot at times. It's a shame we can't get hold of a proper chess engine to run in the background to represent things for the AI - I implemented that AI tutorial I sent the other day and it's genuinely not terrible to play against and tends never to do anything idiotic at the very least.
 
 Love the status line. A bit busy perhaps, but a lot of fun!
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, Apr 5, 2019 at 11:15 AM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, Apr 5, 2019 at 11:15 AM To: Pippin Barr
 The chess AI code you are referring too is actually very general and doesn't actually require a chess engine, but it requires a class that encapsulates all the rules of Chogue so that we can duplicate game states and do the recursive move evaluations. That's what I had done for Rogue Solitaire. But that would mean recoding the whole thing because Chogue'S reliance on collision detection means we can't simulate future moves without actually moving things around.
 
 Actually... not recode the whole thing, only the Findavailablemoves() functions, which would have to do some manual searches in the tilespace to see where the different pieces can actually go.
@@ -370,7 +370,7 @@ best,
 
 Jonathan
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, Apr 5, 2019 at 5:18 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Fri, Apr 5, 2019 at 5:18 PM To: Jonathan Lessard
 Right, true, I mostly meant the relief of having an engine like chess.js that has a complete representation of the board and possible moves and outcomes etc. For any depth I guess the AI requires something that can spit out all legal moves from a position. But also true we could implement similar concepts by iterating pieces and evaluating their possible moves, too.
 
 I'll try to bamboozle the AI and find useful cases!
@@ -382,7 +382,7 @@ I'll try to bamboozle the AI and find useful cases!
 ## Pippin Barr Sat, Apr 6, 4:00 PM
 Hey your comment about possibly just using chess.js... actually I think that might work pretty well? I've been working with chess.js and chessboard.js for my newest thing and I suspect that implement Rogess in it would be quite straightforward! Maybe I should have a go at that? (And we style the chessboard etc. to look like our proper graphics...)
 
-## Jonathan Lessard <glandeurlessard@gmail.com> Mon, Apr 8, 11:08 AM to me
+## Jonathan Lessard Mon, Apr 8, 11:08 AM to me
 
 Sure!
 
@@ -390,7 +390,7 @@ Sure!
 
 Jo
 
-## Pippin Barr <pippin.barr@gmail.com> Mon, Apr 8, 5:03 PM to Jonathan
+## Pippin Barr Mon, Apr 8, 5:03 PM to Jonathan
 
 Cool! I'll do some prodding at Rogess on Wednesday then, I can picture most of how it would work with those libraries in my head I think.
 
@@ -398,7 +398,7 @@ Cool! I'll do some prodding at Rogess on Wednesday then, I can picture most of h
 
 # ROGESS
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, Apr 12, 2019 at 5:45 PM To: Jonathan Lessard <unkelben@gmail.com>
+## Pippin Barr	Fri, Apr 12, 2019 at 5:45 PM To: Jonathan Lessard
 Extremely basic version up. 1HP per attack. Doesn't understand castling or en passant (in terms of maintaining the data about HP).
 
 Even playing this makes it clear it would be sort of nice to consider improving the AI to account for the idea of HP? Or maybe not? Gives me a bit of a headache just thinking about it. It feels like pieces just always attack.
@@ -413,7 +413,7 @@ https://pippinbarr.github.io/rogess/
 
 # ROGESS
 
-## Pippin Barr <pippin.barr@gmail.com>	Sun, Apr 14, 2019 at 5:31 PM To: Jonathan Lessard <unkelben@gmail.com>
+## Pippin Barr	Sun, Apr 14, 2019 at 5:31 PM To: Jonathan Lessard
 Updated to have the same damage model as Chogue (random damage from 0 to attacking piece's current HP), now correctly updates HP model of the board for castling and promotion. Only promotion to Q allowed.
 
 Changed square colours.
@@ -429,7 +429,7 @@ Anyway let me know what you think sometime. I can keep prodding at it and can at
 Pippin
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Sun, Apr 14, 2019 at 5:34 PM To: Jonathan Lessard <unkelben@gmail.com>
+## Pippin Barr	Sun, Apr 14, 2019 at 5:34 PM To: Jonathan Lessard
 Heh, just played my queen aggression mode...
 
 1. e3 Nf6
@@ -439,12 +439,12 @@ Heh, just played my queen aggression mode...
 
 Bye bye queen. Heh.
 
-## Pippin Barr <pippin.barr@gmail.com>	Mon, Apr 15, 2019 at 6:57 PM To: Jonathan Lessard <unkelben@gmail.com>
+## Pippin Barr	Mon, Apr 15, 2019 at 6:57 PM To: Jonathan Lessard
 Latest update has visual styling and basic move notation. Status line faked in and looks preeetty awkward under the title :/ could go under the move notation instead?
 
 Next up is ai simulating attacks (not just captures) to see if it improves its play.
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Tue, Apr 16, 2019 at 10:35 AM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Tue, Apr 16, 2019 at 10:35 AM To: Pippin Barr
 new Rogess is definitely more challenging than old Rogess. I don't know if the AI simulating probabilistic attack would make a significant difference.
 
 As for the "joke" of it... I think it will be definitely be an interesting surprise when the first non-immediate-capture attack happens. I think it would be good to give more feedback on what's happening. I suppose importing the funny rogue-like messages would do the trick ("hit and miss" etc). After the initial suprise... does it significantly change a player's strategy? I haven't played chess for a while so my mind is not so attuned as it was last year to the subtle changes.
@@ -457,7 +457,7 @@ best!
 
 jonathan
 
-## Pippin Barr <pippin.barr@gmail.com>	Tue, Apr 16, 2019 at 1:08 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Tue, Apr 16, 2019 at 1:08 PM To: Jonathan Lessard
 Some more updates:
 - Notation now has flavour stuff and notation style from Chogue
 - Minor CSS improvements
@@ -471,11 +471,11 @@ I am a little concerned that it's still possible to win some percentage of the t
 
 Pippin
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Tue, Apr 16, 2019 at 2:24 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Tue, Apr 16, 2019 at 2:24 PM To: Pippin Barr
 I'll look at this soon!
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Thu, Apr 18, 2019 at 2:27 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Thu, Apr 18, 2019 at 2:27 PM To: Jonathan Lessard
 Looking into an XP system for Rogess now and realising it could be a huge (or small) endeavour. To the extent we want to mimic Rogue (which I guess we do) I can't seem to find any specific specs for how they do it. Playing it a bit myself it's clear you only get XP for killing something, so that's a thing to adhere to I suppose. A basic model
 
 - Captures give XP
@@ -498,7 +498,7 @@ Pippin
 
 # ROGESS
 
-## Pippin Barr <pippin.barr@gmail.com> Fri, May 3, 4:48 PM to Jonathan
+## Pippin Barr Fri, May 3, 4:48 PM to Jonathan
 
 Well, I managed to implement the little HP indicator which looks fairly nice
 
@@ -509,7 +509,7 @@ Spent a couple of hours trying to add HP calculations to the AI but didn't get i
 Beyond that I need to get ignoring checkmate to work properly. And then it's most of the way there?
 
 
-## Pippin Barr <pippin.barr@gmail.com> Fri, May 3, 4:52 PM to Jonathan
+## Pippin Barr Fri, May 3, 4:52 PM to Jonathan
 
 Actually, getting it to ignore checks is kind of borderline impossible :/ The key function that gives you a list of possible moves from a position only allows legal moves, so disallows any move that puts you in check. Allowing check would basically mean rewriting their entire move generation script just for that one idea. Or... yeah it's messy. It would be significantly easier to keep the concept of check, basically.
 
@@ -521,7 +521,7 @@ I can't see the hp visuals? Also for some reason sometimes I get to play black?
 Impossible to go in check.... sucks that it's complicated. It seems it's one of the interesting implications of ROGESS that the notion of checkmate is no longer relevant.
 
 
-## Pippin Barr <pippin.barr@gmail.com> Mon, May 6, 4:24 PM to Jonathan
+## Pippin Barr Mon, May 6, 4:24 PM to Jonathan
 
 Ughhhhhh. Rogess being soooo painful. May have destroyed the online build at this point... anyway the visuals should work. Right now it continues to be the HP stuff in the AI which is so difficult... basically because it involves "non moves" in the engine when you attack but don't capture. Surprisingly hard to fix this and has me editing the engine library myself which is never a smooth process. I'll keep on trying, feels totally necessary. (I did fix the moving in check stuff fairly easily, but then broke so much else I just reset all the day's work and will try again.)
 
@@ -532,7 +532,7 @@ Ooohh. right, I see how this is going against the spirit of the original library
 
 I liked the little "miss" message that I could see, but now I can't reattack the knight!
 
-## Pippin Barr <pippin.barr@gmail.com> Tue, May 7, 5:48 PM to Jonathan
+## Pippin Barr Tue, May 7, 5:48 PM to Jonathan
 
 Heh,  yes it's very broken right now.
 
@@ -547,7 +547,7 @@ Will keep fighting for a day or two more at least. But it's pretty exhausting fr
 # Rogess
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Wed, May 8, 2019 at 2:57 PM To: Jonathan Lessard <unkelben@gmail.com>
+## Pippin Barr	Wed, May 8, 2019 at 2:57 PM To: Jonathan Lessard
 
 Okay I think I fixed that horrible bug (it was to do with the internal square representations of the engine, rookie stuff on my end).
 
@@ -565,7 +565,7 @@ Pippin
 
 # [Rogess] "done"
 
-## Pippin Barr <pippin.barr@gmail.com>	Thu, May 9, 2019 at 11:30 AM To: Jonathan Lessard <unkelben@gmail.com>
+## Pippin Barr	Thu, May 9, 2019 at 11:30 AM To: Jonathan Lessard
 Hey so I think I've made tweaks that put this in the "time to test" space...
 
 - UI tweaks and improvements (turn indication, AI thinking indication)
@@ -576,7 +576,7 @@ I just realised I need to fix the move messages for 2P to avoid "you".
 But yeah... maybe it's "there"?
 
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Thu, May 9, 2019 at 12:48 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Thu, May 9, 2019 at 12:48 PM To: Pippin Barr
 Rogess looks great! Good polish! Good work refactoring the engine!
 The AI is not a pushover but somewhat erratic. For example, it revealed its king to my queen by moving a pawn forward, also, it had my king in check with a knight and chose to move a pawn forward...
 
@@ -589,7 +589,7 @@ Best,
 Jonathan
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Thu, May 9, 2019 at 2:01 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Thu, May 9, 2019 at 2:01 PM To: Jonathan Lessard
 [...]
 
 Re: the AI. Yeah, I don't quite know what to make of it. I suspect it needs to be just good enough to let you understand the game and not much better? We could keep trying to tweak it a bit I guess, but I'm pretty hazy on the impact of various decisions. (And wonder whether it's better just as the original AI without even HP!)
@@ -597,27 +597,27 @@ Re: the AI. Yeah, I don't quite know what to make of it. I suspect it needs to b
 Do we try a bit harder with it or... just release? :)
 
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Thu, May 9, 2019 at 5:08 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Thu, May 9, 2019 at 5:08 PM To: Pippin Barr
 ha ha
 
 there is a bigger problem... I think the AI will simply not attack the king. it will be hard for him to win eh?
 
 Jo
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, May 10, 2019 at 8:38 AM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Fri, May 10, 2019 at 8:38 AM To: Jonathan Lessard
 Oh boy, yeah. I think I may have to look at it at least a bit more, it sure is reluctant to capture the king. It will at certain points, but not for any reason I understand. It is similarly unconcerned about its own king being attacked. I wonder if it's worth just turning off HP in the AI, might be too much to balance. (Basically right now it just adds the HP of each piece to its evaluation.)
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, May 10, 2019 at 10:13 AM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, May 10, 2019 at 10:13 AM To: Pippin Barr
 Would it be hard to tell the AI the kings are worth 100 points? Then it would care a lot about attacking ouors and protecting theirs.
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, May 10, 2019 at 10:19 AM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Fri, May 10, 2019 at 10:19 AM To: Jonathan Lessard
 Yeah maybe something like that. It has kind of positional values, so maybe the king is worth a ton on any square of the board...
 
 ---
 
 # Oh wait
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, May 10, 2019 at 10:27 AM To: Jonathan Lessard <unkelben@gmail.com>
+## Pippin Barr	Fri, May 10, 2019 at 10:27 AM To: Jonathan Lessard
 The king _is_ worth heaps...
 
 ```
@@ -640,19 +640,19 @@ function getAbsoluteValue (piece, isWhite, x ,y) {
 ```
 
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, May 10, 2019 at 12:03 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, May 10, 2019 at 12:03 PM To: Pippin Barr
 oh... then I really wonder why it does't priorize attack! what if you crank it up to 100000?
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, May 10, 2019 at 2:28 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Fri, May 10, 2019 at 2:28 PM To: Jonathan Lessard
 Hm.
 
 Okay, so I moved the HP multiplier idea to modify the base value (e.g. the 900 for the king) instead of the positional value (the table value) and I *think* it's better? It now strenuously avoids pieces targeting its king, and will attack the white king with similar priority. Miiiight be good enough, but if you want to take a look at break it, I'll try again :)
 
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Fri, May 10, 2019 at 2:42 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Fri, May 10, 2019 at 2:42 PM To: Pippin Barr
 seems perfect!
 
-## Pippin Barr <pippin.barr@gmail.com>	Fri, May 10, 2019 at 2:55 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Fri, May 10, 2019 at 2:55 PM To: Jonathan Lessard
 Great!
 
 Huh. Good. Okay then...
@@ -662,20 +662,20 @@ Huh. Good. Okay then...
 
 Process documentation has been kind of weak unfortunately - a lot of this one was verbal discussions we've had over time, there really wasn't a lot of "design" to be done by the time I sat in front of the code... I wrote a bit about it, but it's a bit thin.
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Mon, May 13, 2019 at 11:00 AM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Mon, May 13, 2019 at 11:00 AM To: Pippin Barr
 I'll try to get a few friends to test but I think the strong chessiness might be a bit off-putting for most.
 
 Yes for the press kit! As for documentation... eh! I suppose it can be summarized as our desire to try the combat mechanic of Rogue in Chess, and that eventually we found the basic chess board was the most efficient way to put the focus on that single disruption in Chess' design.
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Mon, May 13, 2019 at 12:20 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Mon, May 13, 2019 at 12:20 PM To: Jonathan Lessard
 First draft press kit:
 https://github.com/pippinbarr/rogess/blob/master/press/README.md
 
 Yeah the process thing is probably most just that it was "too simple" for document extensively, which is fine and kind of a worthwhile learning.
 
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Mon, May 13, 2019 at 12:52 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Mon, May 13, 2019 at 12:52 PM To: Pippin Barr
 Some terse tester feedback:
 
 "C'est lol. Le curseur ne devient pas une main quand on peut cliquer sur les options genre "1 player" ou "resign". Sinon si on ne gagne pas après une partie d'essai c'est qu'on a raté sa vie."
@@ -693,7 +693,7 @@ best,
 Jonathan
 
 
-## Pippin Barr <pippin.barr@gmail.com>	Mon, May 13, 2019 at 4:11 PM To: Jonathan Lessard <glandeurlessard@gmail.com>
+## Pippin Barr	Mon, May 13, 2019 at 4:11 PM To: Jonathan Lessard
 
 C'est lol is high praise indeed!
 
@@ -703,5 +703,5 @@ Bothh fixed (my keyboard sucks and doubles up h's with some frequency).
 
 Next week Tuesday work for a release?
 
-## Jonathan Lessard <glandeurlessard@gmail.com>	Tue, May 14, 2019 at 2:32 PM To: Pippin Barr <pippin.barr@gmail.com>
+## Jonathan Lessard	Tue, May 14, 2019 at 2:32 PM To: Pippin Barr
 exciting!
