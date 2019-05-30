@@ -1,6 +1,183 @@
+# Chess notation branch
+
+## Jonathan to Pippin 7 Jun
+Hi,
+
+I've created a ChessNotation branch that you can "checkout" to work out this feature
+
+I've tried to make all necessary parameters explicit and create a backbone for it. You'll find all that in lines 333 - 396 of MainManager
+
+The attack messages (you scored an excellent hit, etc.) are defined at the beginning of the EatPiece() function.
+
+I'm happy to answer any questions about that crappy code!
+
+In the meantime, I'll create a HitPoint branch to try that idea out. We'll probably want to keep the main branch and that one in parallel. I'm also happy to manage the branch merging if code updates need to be applied for both branches.
+
+BTW, I was thinking in the HitPoint version, we could add HP potions like in Rogue.
+
+best,
+
+Jonathan
+
+## Pippin to Jonathan 10 Jun
+Okay got it. I will try to look at this early next week and get that going...
+
+HP potions makes sense! Yeah there's something frustrating about a wounded queen on 1HP... (though getting my queen captured by a pawn felt pretty hilarious for that reason)
+
+---
+
+# HitPoint version
+
+## Jonathan to Pippin 7 Jun
+Hi,
+
+You can checkout the HitPointVersion branch and try it out.
+
+Some early observations:
+
+It's stupid (in a funny way) It's obviously much easier in general An interesting dynamic is that a queen reaching your "nest" is far scarier as you can't kill her off immediately after losing the first piece! When that happens, defeat is very likely A funny thing emerging is that you might need multiple hits to "unlock" a loot piece. Somehow everything is broken and there are bugs everywhere... Jo
+
+## Pippin to Jonathan 10 Jun
+Oh god. Finally played a round of this. It's stupid but funny for sure. Definitely needs a 'hit' sound I guess to make that feel more like something. Definitely adds pretty fun dynamics around health of pieces...
+
+I tried playing it the more 'obvious' way where I did actually try to capture pieces rather than ignore them and got pretty decimated (I guess I'm bad at our game). Just about to try a run where I 'exploit' the HP to go deep and find a king...
+
+... oh dear, yeah pretty buggy. Hmmm yeah, ran into the null pointer while capture thing a couple times. I don't know though... it doesn't feel that much to me like it does work as a system? It's 'easier' in the sense that it's not just catastrophic right away, but it still feels kind of awesome to be 'fighting' with the chess pieces like that, queens bashing away at each other... it's less obviously dumb that I thought...
+
+So... huh. Actually it's pretty cool. I mean, if it works out we could I suppose release both versions or have it as in the options "attack style" or something, really underplay it even though it completely transforms the game...
+
+## Jonathan to Pippin 11 Jun
+All right!
+
+I'll give it a shot to actually fix the underlying bugs. If I manage it, it will also be beneficial to the other version as well. I can do it!
+
+If we have two versions, how do we present them? I don't want to lose the elegant splash/first level screen.
+
+Or perhaps we keep in bank and release version b a few weeks later for those who liked A and are curious to feel the difference?
+
+Jo
+
+## Pippin to Jonathan 11 Jun
+I believe in you!
+
+Yeah you're right... I don't think they should be together. Maybe it's literally Chogue and Chogue 2: Chogue Harder?
+
+Hehe.
+
+---
+
+# Chogue
+
+## Jonathan to Pippin 25 May
+Some new stuff on Chogue! (https://jonathanlessard.net/chogue/)
+
+When you have time, you can give it a shot and/or read my latest design journal entry to see what's up!
+
+I hope you're enjoying yourself!
+
+amitiés,
+
+Jo
+
+## Pippin to Jonathan 2 Jun
+Holy shit...
+
+[...]
+
+... excellent. Hmmm yeah, so there are still some questions to answer, but shit it's real as you say. Wonderful. Will play some rounds and see if I can feel/intuit anything to do. (I suddenly wondered while reading your writing whether it could be interesting to combine chess/rogue attacks by having pieces attack as per chess [from afar usually] but damage as in Rogue [so some HP for pieces]. So they'd slide all the way over to "hit" the other piece, then slide back to their original position. Could look kind of amazing? Could be too confusing? But the idea of a queen coming from the dark, hitting your piece, and then returning into the dark, could be funny...
+
+All these branches!! Points out that there are kind of fractal levels to each design move. e.g. not just "chess captures" but rather "chess captures for movement" and "rogue attacks for damage model"... endless...
+
+Pippin
+
+## Jonathan to Pippin 5 Jun
+The "damage model" is worth thinking about, it would really change the dynamic. I had thought of something like progressive damage rather than immediate captures but couldn't figure what to do with the attacking piece if it couldn't replace the victim... I had presumed it could take a random valid move like the loot pieces but thought it was really too unfair if it landed on a covered tile and get attacked right after (though now that I think of it, it's not as bad if you're not killed in one shot either). However the idea of going back were you were (Rogue style) makes sense. Although I can imagine the ridicule of those rooks that cross the whole map to hit you and then would fly back accross to their darkness... could be funny!
+
+How about a Chogue meeting? I'm quite available this week. If it's sunny I'm happy to bike to your neighborhood if you've spotted some nice place.
+
+best,
+
+Jonathan
+
+## Pippin to Jonathan 5 Jun
+Hehe, yes, the image of the queen/rook coming, whacking you, and then sliding away is definitely part of the appeal of that mode. An issue would be how to indicate hit points (I'm assuming you'd have hit points corresponding to points value (9 for a queen, 5 for a rook, etc.)...
+
+Anyway yes, we should have a meeting! I'm probably coming in on Thursday if you happen to be in then. Also Friday. But can just as well do a café Wednesday or Thursday afternoons. Odessa is a nice spot on Beaubien.
+
+---
+
+# Re: Chogue
+
+## Pippin to Jonathan
+11 Jun
+
+[...]
+
+I just pushed the basic chess notation thing. I seems pretty robust and really made the game feel different to me, notably the fact you can "see" black's last move much more in your head and make some educated guesses if it's near you.
+
+Next I'll do the messages (I think we should use "defeated" in the one hit version rather than the excellent hit, or if not that then just 'captured' would be fine I think).
+
+Then there's the question of the Rogue-like messages in the other branch, but I'm assuming I leave that side alone until you're done with it?
+
+Anyway, the notation feels good! Am I forgetting anything?
+
+## Jonathan to Pippin 11 Jun
+
+> Next I'll do the messages (I think we should use "defeated" in the one hit version rather than the excellent hit, or if not that then just 'captured' would be fine I think).
+
+Any of those!
+
+> Then there's the question of the Rogue-like messages in the other branch, but I'm assuming I leave that side alone until you're done with it?
+
+I've merged everything back in the master branch so you can start working on the messages. To switch from HP mode, there's now a checkbox in the MainManager : HitPointVersion. We just need to check that box both in the Level1 and LevelGen scene to make a hitpoint version.
+
+## Pippin to Jonathan
+11 Jun
+Niiiiice. Okay. Will work in master again on the messages for both versions!
+
+---
+
+# The attacking sound
+
+## Pippin to Jonathan 12 Jun
+Oh my god I just heard it for the first time and died laughing!
+
+## Jonathan to Pippin 12 Jun
+ha ha!
+
+---
+
+# Last miles
+
+## Jonathan to Pippin 15 Jun
+Hey!
+
+I think we're quite close to conclusion. The game seems pretty robust.
+
+Little outstanding things:
+
+Are we happy with the victory screen and possibility to continue? Do we want a resign button--and if so how? What de we do with our two versions? We can probably finalize Tuesday and think of release! best,
+
+Jo
+
+## Pippin to Jonathan 16 Jun
+
+[...]
+
+### The two versions
+I really like the idea of treating them as completely separate games. I liked your idea of release one and then the other, probably classic version first and then the HP version. I guess we could try to think a bit more intelligently about what we would call them and how one would space out the releases. Plus that way we get TWO games on our resumés, not just one...
+
+[...]
+
+## Jonathan to Pippin 18 Jun
+
+he he. Yes, good. I liked Cherry Chogue because it is also kind of a more easy flavor and perhaps less substantial.
+
+---
+
 # [Chogue]
 
-## Pippin Barr	Sat, Jun 23, 2018 at 5:13 PM To: Jonathan Lessard
+## Pippin Barr Sat, Jun 23, 2018 at 5:13 PM To: Jonathan Lessard
 
 [...]
 
