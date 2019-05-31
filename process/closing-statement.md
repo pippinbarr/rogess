@@ -1,3 +1,5 @@
+
+
 # Closing statement
 
 [Rogess](https://github.com/pippinbarr/rogess) (by Jonathan Lessard and Pippin Barr) could be thought of as a kind of "sequel" to [Chogue](https://github.com/pippinbarr/chogue/wiki/Press-Kit). It's more accurate to say, though, that it is a game occupying the same design space as Chogue, representing a second data-point in our exploration of [hybrid game design](https://www.gamasutra.com/blogs/PippinBarr/20180612/319854/Chess__Rogue__Chogue_Some_notes_on_hybrid_game_design.php).
@@ -12,9 +14,15 @@
 
 [Rogess](https://github.com/pippinbarr/rogess) began with a basic tweak to [Chogue](https://github.com/pippinbarr/chogue/wiki/Press-Kit)'s combat mechanic: pieces would "damage" each other on attacking rather than immediately capture, as in [Rogue](https://archive.org/details/msdos_Rogue_1983).
 
+## 2 June 2019
+
+Genesis [email](https://github.com/pippinbarr/rogess/blob/master/process/correspondence.md#chogue)
+
 ## (7 June 2019)
 
-Jonathan implemented this in the original Chogue code and included a checkbox for turning the feature on and off ([dd7fcb2](https://github.com/pippinbarr/chogue/commit/dd7fcb2f51b464b1e8527a38aa1c167862889f1f)). The damage level was set to a random value between zero and the attacking piece's maximum hit-points (HP). In a pleasing hybridization, we gave chess pieces HP equivalent to their chess value (1 for a pawn, 3 for a knight, 5 for a rook, etc.).
+Jonathan implemented it in the original Chogue code and included a checkbox for turning the feature on and off ([dd7fcb2](https://github.com/pippinbarr/chogue/commit/dd7fcb2f51b464b1e8527a38aa1c167862889f1f)). The damage level was set to a random value between zero and the attacking piece's maximum hit-points (HP). In a pleasing hybridization, we gave chess pieces HP equivalent to their chess value (1 for a pawn, 3 for a knight, 5 for a rook, etc.).
+
+[Email](https://github.com/pippinbarr/rogess/blob/master/process/correspondence.md#jonathan-to-pippin-7-jun-1) Discussion of the feel of the game.
 
 ## PGN (11 June 2018)
 
@@ -46,7 +54,7 @@ Initial version [c5c606b](https://github.com/pippinbarr/chogue/commit/c5c606bd8d
 [Concern over difficulty and King HP, issue of AI](https://github.com/pippinbarr/rogess/blob/master/process/correspondence.md#pippin-barr-pippinbarrgmailcomfri-mar-22-2019-at-319-pm-to-jonathan-lessard-glandeurlessardgmailcom)
 [Strong king version is pleasing, continuing discussion of AI issues](https://github.com/pippinbarr/rogess/blob/master/process/correspondence.md#jonathan-lessard-glandeurlessardgmailcomfri-mar-22-2019-at-334-pm-to-pippin-barr-pippinbarrgmailcom)
 
-## AI!!! (23 March 2019)
+## Difficulty!!! (23 March 2019)
 [Concerns over AI ease](https://github.com/pippinbarr/rogess/blob/master/process/correspondence.md#chess-ai)
 [Including re-suggestion of changing relationship of pieces, white with one piece](https://github.com/pippinbarr/rogess/blob/master/process/correspondence.md#jonathan-lessard-glandeurlessardgmailcomtue-mar-26-2019-at-1239-pm-to-pippin-barr-pippinbarrgmailcom)
 [Implemented](https://github.com/pippinbarr/rogess/blob/master/process/correspondence.md#rogess-ai)

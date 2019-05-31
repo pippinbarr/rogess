@@ -1,15 +1,48 @@
+# Chogue
+
+## Jonathan to Pippin 25 May
+Some new stuff on Chogue! (https://jonathanlessard.net/chogue/)
+
+When you have time, you can give it a shot and/or read my latest design journal entry to see what's up!
+
+I hope you're enjoying yourself!
+
+amitiés,
+
+Jo
+
+## Pippin to Jonathan 2 Jun
+
+[...]
+
+I suddenly wondered while reading your writing whether it could be interesting to combine chess/rogue attacks by having pieces attack as per chess [from afar usually] but damage as in Rogue [so some HP for pieces]. So they'd slide all the way over to "hit" the other piece, then slide back to their original position. Could look kind of amazing? Could be too confusing? But the idea of a queen coming from the dark, hitting your piece, and then returning into the dark, could be funny...
+
+All these branches!! Points out that there are kind of fractal levels to each design move. e.g. not just "chess captures" but rather "chess captures for movement" and "rogue attacks for damage model"... endless...
+
+Pippin
+
+## Jonathan to Pippin 5 Jun
+
+The "damage model" is worth thinking about, it would really change the dynamic. I had thought of something like progressive damage rather than immediate captures but couldn't figure what to do with the attacking piece if it couldn't replace the victim... I had presumed it could take a random valid move like the loot pieces but thought it was really too unfair if it landed on a covered tile and get attacked right after (though now that I think of it, it's not as bad if you're not killed in one shot either). However the idea of going back were you were (Rogue style) makes sense. Although I can imagine the ridicule of those rooks that cross the whole map to hit you and then would fly back accross to their darkness... could be funny!
+
+How about a Chogue meeting? I'm quite available this week. If it's sunny I'm happy to bike to your neighborhood if you've spotted some nice place.
+
+best,
+
+Jonathan
+
+## Pippin to Jonathan 5 Jun
+Hehe, yes, the image of the queen/rook coming, whacking you, and then sliding away is definitely part of the appeal of that mode. An issue would be how to indicate hit points (I'm assuming you'd have hit points corresponding to points value (9 for a queen, 5 for a rook, etc.)...
+
+Anyway yes, we should have a meeting! I'm probably coming in on Thursday if you happen to be in then. Also Friday. But can just as well do a café Wednesday or Thursday afternoons. Odessa is a nice spot on Beaubien.
+
+---
+
 # Chess notation branch
 
 ## Jonathan to Pippin 7 Jun
-Hi,
 
-I've created a ChessNotation branch that you can "checkout" to work out this feature
-
-I've tried to make all necessary parameters explicit and create a backbone for it. You'll find all that in lines 333 - 396 of MainManager
-
-The attack messages (you scored an excellent hit, etc.) are defined at the beginning of the EatPiece() function.
-
-I'm happy to answer any questions about that crappy code!
+[...]
 
 In the meantime, I'll create a HitPoint branch to try that idea out. We'll probably want to keep the main branch and that one in parallel. I'm also happy to manage the branch merging if code updates need to be applied for both branches.
 
@@ -66,50 +99,9 @@ Hehe.
 
 ---
 
-# Chogue
-
-## Jonathan to Pippin 25 May
-Some new stuff on Chogue! (https://jonathanlessard.net/chogue/)
-
-When you have time, you can give it a shot and/or read my latest design journal entry to see what's up!
-
-I hope you're enjoying yourself!
-
-amitiés,
-
-Jo
-
-## Pippin to Jonathan 2 Jun
-Holy shit...
-
-[...]
-
-... excellent. Hmmm yeah, so there are still some questions to answer, but shit it's real as you say. Wonderful. Will play some rounds and see if I can feel/intuit anything to do. (I suddenly wondered while reading your writing whether it could be interesting to combine chess/rogue attacks by having pieces attack as per chess [from afar usually] but damage as in Rogue [so some HP for pieces]. So they'd slide all the way over to "hit" the other piece, then slide back to their original position. Could look kind of amazing? Could be too confusing? But the idea of a queen coming from the dark, hitting your piece, and then returning into the dark, could be funny...
-
-All these branches!! Points out that there are kind of fractal levels to each design move. e.g. not just "chess captures" but rather "chess captures for movement" and "rogue attacks for damage model"... endless...
-
-Pippin
-
-## Jonathan to Pippin 5 Jun
-The "damage model" is worth thinking about, it would really change the dynamic. I had thought of something like progressive damage rather than immediate captures but couldn't figure what to do with the attacking piece if it couldn't replace the victim... I had presumed it could take a random valid move like the loot pieces but thought it was really too unfair if it landed on a covered tile and get attacked right after (though now that I think of it, it's not as bad if you're not killed in one shot either). However the idea of going back were you were (Rogue style) makes sense. Although I can imagine the ridicule of those rooks that cross the whole map to hit you and then would fly back accross to their darkness... could be funny!
-
-How about a Chogue meeting? I'm quite available this week. If it's sunny I'm happy to bike to your neighborhood if you've spotted some nice place.
-
-best,
-
-Jonathan
-
-## Pippin to Jonathan 5 Jun
-Hehe, yes, the image of the queen/rook coming, whacking you, and then sliding away is definitely part of the appeal of that mode. An issue would be how to indicate hit points (I'm assuming you'd have hit points corresponding to points value (9 for a queen, 5 for a rook, etc.)...
-
-Anyway yes, we should have a meeting! I'm probably coming in on Thursday if you happen to be in then. Also Friday. But can just as well do a café Wednesday or Thursday afternoons. Odessa is a nice spot on Beaubien.
-
----
-
 # Re: Chogue
 
-## Pippin to Jonathan
-11 Jun
+## Pippin to Jonathan 11 Jun
 
 [...]
 
@@ -150,13 +142,10 @@ ha ha!
 # Last miles
 
 ## Jonathan to Pippin 15 Jun
-Hey!
 
-I think we're quite close to conclusion. The game seems pretty robust.
+[...]
 
-Little outstanding things:
-
-Are we happy with the victory screen and possibility to continue? Do we want a resign button--and if so how? What de we do with our two versions? We can probably finalize Tuesday and think of release! best,
+What de we do with our two versions? We can probably finalize Tuesday and think of release! best,
 
 Jo
 
