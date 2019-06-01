@@ -4,6 +4,8 @@
 
 [Rogess](https://github.com/pippinbarr/rogess) (by [Jonathan Lessard](https://jonathanlessard.net/) and [Pippin Barr](http://pippinbarr.com/)) can be thought of as a kind of "sequel" to [Chogue](https://github.com/pippinbarr/chogue/wiki/Press-Kit). It's more accurate to say, though, that it is a game occupying the same design space as Chogue, representing a second data-point in our exploration of [hybrid game design](https://www.gamasutra.com/blogs/PippinBarr/20180612/319854/Chess__Rogue__Chogue_Some_notes_on_hybrid_game_design.php). In brief, with hybrid game design we're exploring the idea of taking two separate games and combining them by using "design decisions" selectively taken from one or the other game, then seeing what the result looks like.
 
+(__Note__: throughout this text, I’ll be linking to process materials generated as part of the project in its [code repository](https://github.com/pippinbarr/rogess/blob/master/process/README.md). The links are both to the specific moments I added relevant code to the project and wrote notes about it - signified by the mysterious strings of letters and numbers known as "commit hashes" - and also to the email correspondence Jonathan and I conducted throughout. This approach to process documentation is part of the [Games as Research](https://gamesasresearch.com) project.)
+
 ![](images/chogue.png)  
 _Chogue, the "prequel" to Rogess_
 
